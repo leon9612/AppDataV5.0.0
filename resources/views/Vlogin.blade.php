@@ -98,6 +98,32 @@
             margin-bottom: 2rem;
         }
 
+        /* Logo: ocupa el ancho de la tarjeta hasta 340px y mantiene la proporción original (340x140) */
+        .brand-logo {
+            display: block;
+            width: 100%;
+            max-width: 340px;
+            height: auto;
+            aspect-ratio: 340 / 140;
+            object-fit: contain;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+
+        @media (max-width: 400px) {
+            .login-wrapper {
+                padding: 1rem;
+            }
+
+            .card-glass {
+                padding: 2rem 1.25rem;
+            }
+
+            .brand {
+                margin-bottom: 1.5rem;
+            }
+        }
+
         .brand-icon {
             width: 56px;
             height: 56px;
@@ -459,6 +485,36 @@
             background: rgba(239, 68, 68, 0.1);
         }
 
+        .ls-section-title {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin: 0.25rem 0 0.6rem;
+        }
+
+        #cfgServerList {
+            margin-bottom: 1.25rem;
+        }
+
+        .ls-item-edit {
+            background: none;
+            border: none;
+            color: rgba(56, 189, 248, 0.6);
+            cursor: pointer;
+            font-size: 0.85rem;
+            padding: 4px 6px;
+            border-radius: 5px;
+            transition: color 0.2s, background 0.2s;
+            flex-shrink: 0;
+        }
+
+        .ls-item-edit:hover {
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+        }
+
         .ls-actions {
             display: flex;
             gap: 8px;
@@ -531,6 +587,11 @@
                 </div>
                 <button class="ls-close" onclick="closeLsModal()"><i class="bi bi-x-lg"></i></button>
             </div>
+            <!-- Configuración compartida guardada en el servidor (se pide una sola vez para todos los dispositivos) -->
+            <div class="ls-section-title"><i class="bi bi-hdd-network me-1"></i>Configuración del servidor</div>
+            <div id="cfgServerList"></div>
+
+            <div class="ls-section-title"><i class="bi bi-laptop me-1"></i>localStorage de este equipo</div>
             <input class="ls-search" type="text" id="lsSearch" placeholder="Buscar clave..." oninput="renderKeys()">
             <div class="ls-count" id="lsCount"></div>
             <div id="lsKeyList"></div>
@@ -547,7 +608,7 @@
         <div class="card-glass">
             <div class="brand">
                 <div onclick="bajarLineas()">
-                    <img src="{{ asset('assets/img/datasim.png') }} " alt="Logo" style="width: 340px; height: 140px;">
+                    <img src="{{ asset('assets/img/datasim.png') }}" alt="Logo" class="brand-logo">
                 </div>
                 <!-- <div class="brand-name">Data<span>Sim</span></div> -->
                 <!-- <div class="brand-sub">Sistema de gestión de información</div> -->
@@ -658,7 +719,132 @@
         // ── Modal LocalStorage ──
         function openLsModal() {
             document.getElementById('lsOverlay').classList.add('open');
+            renderConfigServidor();
             renderKeys();
+        }
+
+        // ── Configuración del servidor (urlserver e ips_<linea>, ver Clogin::saveConfigApp) ──
+        // Campos de cada pista: los mismos que pide getdatamachine.js (TIPOS_POR_LINEA)
+        const CONFIG_SERVIDOR = {
+            urlserver: { titulo: 'URL del servidor' },
+            ips_motos: { titulo: 'Pista motos', campos: ['freno', 'datareles'] },
+            ips_livianos: { titulo: 'Pista livianos', campos: ['freno', 'alineador', 'suspension', 'dataalineador', 'datareles', 'tipopista'] },
+            ips_mixta: { titulo: 'Pista mixta', campos: ['freno', 'alineador', 'suspension', 'dataalineador', 'datareles', 'tipopista'] },
+            ips_taximetro: { titulo: 'Taxímetro', campos: ['taximetro'] }
+        };
+        const ETIQUETAS_CAMPO = { dataalineador: 'Data alineador', datareles: 'Data reles', tipopista: 'Tipo de pista' };
+        const SWAL_OSCURO = { background: '#0f172a', color: '#f1f5f9', confirmButtonColor: '#38bdf8', cancelButtonColor: '#334155' };
+        let configServidor = {};
+
+        function etiquetaCampo(campo) {
+            return ETIQUETAS_CAMPO[campo] || 'IP – ' + campo.charAt(0).toUpperCase() + campo.slice(1);
+        }
+
+        function renderConfigServidor() {
+            const list = document.getElementById('cfgServerList');
+            list.innerHTML = '<div class="ls-empty" style="padding:1rem 0">Cargando...</div>';
+            leerConfigApp().then(data => {
+                configServidor = data || {};
+                list.innerHTML = Object.keys(CONFIG_SERVIDOR).map(clave => {
+                    const valor = configServidor[clave];
+                    const texto = !valor ? '' : typeof valor === 'object' ?
+                        Object.entries(valor).map(([k, v]) => `${k}: ${v}`).join(' · ') : valor;
+                    return `<div class="ls-item">
+                        <div class="ls-item-info">
+                            <div class="ls-item-key">${escHtml(CONFIG_SERVIDOR[clave].titulo)}</div>
+                            <div class="ls-item-val" title="${escHtml(texto)}">${escHtml(texto) || '<em style="opacity:0.5">sin configurar (se pedirá al usarse)</em>'}</div>
+                        </div>
+                        <button class="ls-item-edit" onclick="editarConfigServidor('${clave}')" title="Editar"><i class="bi bi-pencil"></i></button>
+                        ${valor ? `<button class="ls-item-del" onclick="borrarConfigServidor('${clave}')" title="Borrar (se volverá a pedir)"><i class="bi bi-trash3"></i></button>` : ''}
+                    </div>`;
+                }).join('');
+            }).catch(() => {
+                list.innerHTML = '<div class="ls-empty" style="padding:1rem 0">No se pudo leer la configuración del servidor</div>';
+            });
+        }
+
+        // Tras guardar en el servidor se actualiza también la copia local de este equipo
+        function aplicarConfigLocal(clave, valor) {
+            if (!valor) {
+                localStorage.removeItem(clave);
+            } else {
+                localStorage.setItem(clave, typeof valor === 'object' ? JSON.stringify(valor) : valor);
+            }
+            renderConfigServidor();
+            renderKeys();
+        }
+
+        function editarConfigServidor(clave) {
+            const def = CONFIG_SERVIDOR[clave];
+            const actual = configServidor[clave] || (def.campos ? {} : '');
+            const opciones = {
+                ...SWAL_OSCURO,
+                title: def.titulo,
+                showCancelButton: true,
+                confirmButtonText: 'Guardar',
+                cancelButtonText: 'Cancelar',
+                showLoaderOnConfirm: true
+            };
+
+            if (def.campos) {
+                opciones.html = def.campos.map(campo => `
+                    <div style="text-align:left;margin-bottom:10px">
+                        <label style="display:block;font-size:13px;color:#94a3b8;margin-bottom:4px">${escHtml(etiquetaCampo(campo))}</label>
+                        <input id="cfg-${campo}" class="swal2-input" style="margin:0;width:100%;box-sizing:border-box" value="${escHtml(actual[campo] || '')}">
+                    </div>`).join('');
+                opciones.preConfirm = () => {
+                    const valores = {};
+                    def.campos.forEach(campo => {
+                        const val = document.getElementById(`cfg-${campo}`).value.trim();
+                        if (val) valores[campo] = val;
+                    });
+                    return guardarConfigApp(clave, JSON.stringify(valores)).then(
+                        data => data,
+                        () => Swal.showValidationMessage('No se pudo guardar en el servidor')
+                    );
+                };
+            } else {
+                opciones.input = 'text';
+                opciones.inputValue = actual;
+                opciones.inputPlaceholder = 'http://localhost:3000/';
+                opciones.preConfirm = (value) => {
+                    value = (value || '').trim();
+                    if (!/^https?:\/\//i.test(value)) {
+                        Swal.showValidationMessage('La url debe comenzar con http:// o https://');
+                        return false;
+                    }
+                    return guardarConfigApp(clave, value).then(
+                        data => data,
+                        () => Swal.showValidationMessage('No se pudo guardar en el servidor')
+                    );
+                };
+            }
+
+            Swal.fire(opciones).then(r => {
+                if (r.isConfirmed && r.value) {
+                    aplicarConfigLocal(clave, r.value.valor);
+                    Swal.fire({ ...SWAL_OSCURO, icon: 'success', title: 'Guardado', timer: 1500, showConfirmButton: false });
+                }
+            });
+        }
+
+        function borrarConfigServidor(clave) {
+            Swal.fire({
+                ...SWAL_OSCURO,
+                title: 'Borrar ' + CONFIG_SERVIDOR[clave].titulo,
+                text: 'Se borrará del servidor y se volverá a pedir en todos los dispositivos.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Borrar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#ef4444'
+            }).then(r => {
+                if (!r.isConfirmed) return;
+                guardarConfigApp(clave, '').then(
+                    () => aplicarConfigLocal(clave, null),
+                    () => Swal.fire({ ...SWAL_OSCURO, icon: 'error', title: 'No se pudo borrar en el servidor' })
+                );
+            });
         }
 
         function closeLsModal() {

@@ -178,8 +178,8 @@
             $("#divDoblePeso").hide();
             grupoPesaje2.style.display = 'none';
         }
-        if (localStorage.getItem("ips_motos") == "" || localStorage.getItem("ips_motos") == null || localStorage.getItem("ips_motos") == undefined) {
-            await pedirYGuardarIPs('motos');
+        // Los datos de la pista vienen del servidor (se piden una sola vez para todos los dispositivos)
+        if (await asegurarIPsLinea('motos')) {
             obtenerArchivoDesencriptado('motos', 'freno');
             obtenerArchivoDesencriptado('motos', 'bascula');
             

@@ -431,8 +431,8 @@
             tiempoInput.value = tiempoGuardado;
             // console.log(`📌 Vista: ${document.querySelector('.section-title h2')?.textContent}, Tiempo cargado: ${tiempoGuardado} minutos`);
         }
-        if (localStorage.getItem("ips_livianos") == "" || localStorage.getItem("ips_livianos") == null || localStorage.getItem("ips_livianos") == undefined) {
-            await pedirYGuardarIPs('livianos');
+        // Los datos de la pista vienen del servidor (se piden una sola vez para todos los dispositivos)
+        if (await asegurarIPsLinea('livianos')) {
             obtenerArchivoDesencriptado('livianos', 'freno');
             obtenerArchivoDesencriptado('livianos', 'bascula');
             obtenerArchivoDesencriptado('livianos', 'alineador');

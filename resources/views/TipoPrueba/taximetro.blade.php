@@ -140,12 +140,10 @@
         }
 
 
-        // Pedir la IP del taxímetro (una sola vez) y con ella buscar su archivo de configuración
-        let ipTaximetro = obtenerIPConfigurada('taximetro', 'taximetro');
-        if (!ipTaximetro) {
-            const ips = await pedirYGuardarIPs('taximetro');
-            ipTaximetro = ips.taximetro;
-        }
+        // La IP del taxímetro viene del servidor (se pide una sola vez para todos los dispositivos)
+        // y con ella se busca su archivo de configuración
+        await asegurarIPsLinea('taximetro');
+        const ipTaximetro = obtenerIPConfigurada('taximetro', 'taximetro');
 
         if (!ipTaximetro) {
             Toast.fire({
@@ -163,7 +161,7 @@
 
         if (!configTaximetro) {
             // La IP no corresponde a ningún taxímetro: se descarta para volver a pedirla
-            localStorage.removeItem('ips_taximetro');
+            borrarIPsLinea('taximetro');
             Toast.fire({
                 icon: 'warning',
                 title: '⚠️ Sin información',
