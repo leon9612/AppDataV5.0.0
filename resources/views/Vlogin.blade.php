@@ -848,8 +848,8 @@
         // ── Tu función original bajarLineas (sin cambios) ──
         let bajarLineas = () => {
             $.ajax({
-                // url: 'https://' + localStorage.getItem('dominio') + '/cda/index.php/Cservicio/getLineas',
-                url: 'https://cdatecmmas.tecmmas.com/cda/index.php/Cservicio/getLineas',
+                 url: 'https://' + localStorage.getItem('dominio') + '/cda/index.php/Cservicio/getLineas',
+                //url: 'https://cdatecmmas.tecmmas.com/cda/index.php/Cservicio/getLineas',
                 method: 'GET',
                 success: function(data) {
                     if (data.length > 0) {
