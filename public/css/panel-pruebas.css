@@ -1,0 +1,346 @@
+/* ════════════════════════════════════════════════════════════════════════
+   panel-pruebas-pro — estilos compartidos por todos los simuladores
+   (simluadorluces, simuladorfrenomixto, simulatorfrenomoto, simulatorgases,
+   simulatoropa, simulatorsonometro, simulatortaximetro).
+
+   Cada blade solo debe definir en su propio <style>:
+   - Las variables de color de acento del módulo (--pesaje, --distancia, etc.)
+   - Overrides de ancho vía --eje-chip-width / --eje-chip-solo-width si su
+     diseño necesita un ancho distinto al default (215px).
+   ════════════════════════════════════════════════════════════════════════ */
+
+.panel-pruebas-pro {
+    --bg: #F7F8FA;
+    --surface: #FFFFFF;
+    --border: #E5E7EB;
+    --text: #1F2937;
+    --muted: #6B7280;
+
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg);
+}
+
+.panel-pruebas-pro .card-header {
+    background-color: var(--surface);
+    border-bottom: 1px solid var(--border);
+}
+
+.panel-pruebas-pro .seccion {
+    padding: 1.1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.panel-pruebas-pro .seccion:last-of-type {
+    border-bottom: none;
+}
+
+.panel-pruebas-pro .seccion-titulo {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-bottom: .9rem;
+}
+
+.panel-pruebas-pro .seccion-icono {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .85rem;
+    flex-shrink: 0;
+    background-color: var(--accent-bg);
+    color: var(--accent);
+}
+
+.panel-pruebas-pro .seccion-titulo h6 {
+    margin: 0;
+    font-weight: 700;
+    font-size: .9rem;
+    color: var(--text);
+}
+
+.panel-pruebas-pro .seccion-titulo .seccion-sub {
+    font-size: .72rem;
+    color: var(--muted);
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+/* Fila de chips: flex centrado, no grid, así nunca quedan pegados a un lado */
+.panel-pruebas-pro .fila-chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .6rem;
+}
+
+/* Chip editable (Pesajes / Fuerzas / Distancias / Luces / Auxiliares) */
+.panel-pruebas-pro .eje-chip {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: .4rem .4rem .4rem .55rem;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
+    width: var(--eje-chip-width, 215px);
+}
+
+.panel-pruebas-pro .eje-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background-color: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: .72rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.panel-pruebas-pro .eje-inputs {
+    display: flex;
+    gap: .35rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.panel-pruebas-pro .eje-input {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    flex: 1;
+    min-width: 0;
+}
+
+.panel-pruebas-pro .eje-input label {
+    font-size: .58rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    padding-left: 2px;
+}
+
+.panel-pruebas-pro .eje-input input {
+    width: 100%;
+    height: 34px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    font-size: .8rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--text);
+    padding: 0 4px;
+}
+
+.panel-pruebas-pro .eje-input input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+/* Botón de enviar: ocupa todo el alto del chip → área táctil grande */
+.panel-pruebas-pro .eje-send {
+    align-self: stretch;
+    width: 42px;
+    min-height: 44px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--accent-bg);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    font-size: 1.15rem;
+    transition: background-color .15s, color .15s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.panel-pruebas-pro .eje-send:hover,
+.panel-pruebas-pro .eje-send:active {
+    background-color: var(--accent);
+    color: #fff;
+}
+
+/* Confirmación visual momentánea al enviar un eje */
+.panel-pruebas-pro .eje-send.enviado {
+    background-color: #16A34A;
+    color: #fff;
+}
+
+.panel-pruebas-pro .eje-send:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Chip de un solo valor (Alineación / Pesaje-Freno motos) */
+.panel-pruebas-pro .eje-chip.solo {
+    width: var(--eje-chip-solo-width, 215px);
+}
+
+.panel-pruebas-pro .eje-chip.solo .eje-input {
+    text-align: center;
+}
+
+.panel-pruebas-pro .eje-chip.solo .eje-input label {
+    text-align: center;
+    padding-left: 0;
+}
+
+/* Stat chip (solo lectura: Desequilibrios / Eficacias) */
+.panel-pruebas-pro .stat-chip {
+    background-color: #F3F4F6;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: .5rem .9rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    width: 130px;
+}
+
+.panel-pruebas-pro .stat-chip label {
+    font-size: .62rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .03em;
+}
+
+.panel-pruebas-pro .stat-chip input {
+    border: none;
+    background: transparent;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--text);
+    padding: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.panel-pruebas-pro input[type="number"]::-webkit-inner-spin-button,
+.panel-pruebas-pro input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.panel-pruebas-pro input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+/* Mensaje de error de validación bajo un input (usado por Luces) */
+.panel-pruebas-pro .campo-error {
+    display: block;
+    font-size: .65rem;
+    text-align: center;
+    margin-top: 2px;
+}
+
+/* ─── Acción "Dato tomado": una franja propia, fuera de .fila-chips ─── */
+.panel-pruebas-pro .accion-dato-tomado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    background: linear-gradient(135deg, #ECFDF5, #F0FDF4);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: .9rem 1.25rem;
+}
+
+.panel-pruebas-pro .accion-dato-tomado-info {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: .78rem;
+    color: var(--muted);
+}
+
+.panel-pruebas-pro .accion-dato-tomado-info i {
+    color: #16A34A;
+    font-size: .95rem;
+}
+
+.panel-pruebas-pro .btn-dato-tomado {
+    background-color: #16A34A;
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: .85rem;
+    padding: .65rem 1.6rem;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    box-shadow: 0 2px 8px rgba(22, 163, 74, .25);
+    transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.panel-pruebas-pro .btn-dato-tomado:hover {
+    filter: brightness(0.95);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(22, 163, 74, .3);
+}
+
+.panel-pruebas-pro .btn-dato-tomado:active {
+    transform: translateY(0);
+}
+
+.panel-pruebas-pro .btn-dato-tomado:disabled {
+    background-color: #D1D5DB;
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: .8;
+}
+
+.panel-pruebas-pro .btn-dato-tomado.confirmado {
+    background-color: #15803D;
+}
+
+.panel-pruebas-pro .barra-acciones {
+    background-color: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 1rem 1.25rem;
+}
+
+.panel-pruebas-pro .barra-acciones .btn {
+    min-height: 44px;
+}
+
+@media (max-width: 480px) {
+    .panel-pruebas-pro .accion-dato-tomado {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .panel-pruebas-pro .btn-dato-tomado {
+        justify-content: center;
+    }
+}
+
+/* Mobile: chips a ancho completo, más fáciles de tocar */
+@media (max-width: 420px) {
+
+    .panel-pruebas-pro .eje-chip,
+    .panel-pruebas-pro .eje-chip.solo {
+        width: 100%;
+        max-width: 320px;
+    }
+}
