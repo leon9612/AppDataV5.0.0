@@ -224,10 +224,23 @@
                                     <div class="card-header py-3 px-4 d-flex align-items-center gap-2">
                                         <i class="bi bi-database text-dark"></i>
                                         <h5 class="mb-0 fw-bold" style="font-size:1rem;">Datos de la prueba</h5>
-                                        <!-- Botón para abrir el modal de instrucciones -->
-                                        <button class="btn-instrucciones-modal" data-bs-toggle="modal" data-bs-target="#instruccionesModal">
-                                            <i class="bi bi-question-circle-fill"></i> Instrucciones
-                                        </button>
+                                        <div class="ms-auto d-flex align-items-center gap-2">
+                                            <!-- Modo de trama del luxómetro (debe coincidir con la configuración de la app) -->
+                                            <label for="modoLuxometro" class="mb-0 small fw-semibold text-nowrap">Modo</label>
+                                            <select id="modoLuxometro" class="form-select form-select-sm" style="width:auto;">
+                                                <option value="default">Por defecto</option>
+                                                <option value="combi2">Combi 2</option>
+                                                <option value="tecmmas">Tecmmas</option>
+                                                <option value="moon">Moon</option>
+                                                <option value="capelec2serial">Capelec 2 serial</option>
+                                                <option value="capelec2">Capelec 2 (ticket)</option>
+                                                <option value="capelec">Capelec (archivo RES)</option>
+                                            </select>
+                                            <!-- Botón para abrir el modal de instrucciones -->
+                                            <button class="btn-instrucciones-modal" data-bs-toggle="modal" data-bs-target="#instruccionesModal">
+                                                <i class="bi bi-question-circle-fill"></i> Instrucciones
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <!-- ════════════ LUCES BAJAS ════════════ -->
@@ -446,6 +459,16 @@
 
                                     @endif;
 
+                                    <!-- ════════════ ACCIÓN: DATO TOMADO (solo Capelec / Capelec 2) ════════════ -->
+                                    <div class="accion-dato-tomado" id="accionDatoTomadoLuces" style="display:none;">
+                                        <div class="accion-dato-tomado-info">
+                                            <i class="bi bi-info-circle"></i>
+                                            <span>Entrega a la app todas las luces enviadas en un solo resultado</span>
+                                        </div>
+                                        <button class="btn-dato-tomado" id="btnDatoTomadoGeneralLuces">
+                                            <i class="bi bi-check-circle"></i> Dato tomado
+                                        </button>
+                                    </div>
 
                                 </div>
                             </div>
@@ -608,6 +631,7 @@
         // console.log(data)
         var datos = {
             tipovehiculo: parseInt(tipovehiculo),
+            modo: document.getElementById('modoLuxometro').value,
         };
 
 
@@ -684,7 +708,7 @@
 
         enviarDatosAlTableroLuces('enviar-dato', {
             tipovehiculo: parseInt(document.getElementById('tipovehiculo').value),
-            modo: "tecmmas",
+            modo: document.getElementById('modoLuxometro').value,
             tipoLuz: tipo === 'anti' ? 'antiniebla' : tipo,
             ladoLuz: lado,
             inclinacion: Number((Math.random() * (2.0 - 1.3) + 1.3).toFixed(2)),
@@ -760,7 +784,50 @@
     $('#btnConectarSimuladorLuces').on('click', conectarluces);
     $('#btnDesconectarSimuladorLuces').on('click', desconectarSimuladorLuces);
 
+    // ─── Modo del luxómetro (recordado en localStorage) ────────────────────
+    // Valores válidos según EnviarDatoLuxometroDto en appdatamachine.
+    // Se guarda por tipo de vehículo porque mixta y motos pueden usar equipos distintos.
+    const MODOS_LUXOMETRO = ['default', 'combi2', 'tecmmas', 'moon', 'capelec2serial', 'capelec2', 'capelec'];
+    // Modos que entregan todas las luces juntas con el botón "Dato tomado".
+    const MODOS_DATO_TOMADO = ['capelec2', 'capelec'];
+    const claveModoLuxometro = () => `modo_luxometro_${document.getElementById('tipovehiculo').value}`;
+
+    function cargarModoLuxometro() {
+        const guardado = localStorage.getItem(claveModoLuxometro());
+        document.getElementById('modoLuxometro').value =
+            MODOS_LUXOMETRO.includes(guardado) ? guardado : 'default';
+        mostrarDatoTomadoLuces();
+    }
+
+    function mostrarDatoTomadoLuces() {
+        const visible = MODOS_DATO_TOMADO.includes(document.getElementById('modoLuxometro').value);
+        document.getElementById('accionDatoTomadoLuces').style.display = visible ? '' : 'none';
+    }
+
+    $('#modoLuxometro').on('change', function() {
+        localStorage.setItem(claveModoLuxometro(), this.value);
+        mostrarDatoTomadoLuces();
+    });
+
+    // ─── "Dato tomado": entrega juntas todas las luces enviadas ────────────
+    $('#btnDatoTomadoGeneralLuces').on('click', function() {
+        enviarDatosAlTableroLuces('dato-tomado', {
+            tipovehiculo: parseInt(document.getElementById('tipovehiculo').value),
+            modo: document.getElementById('modoLuxometro').value,
+        });
+
+        const btn = this;
+        btn.innerHTML = '<i class="bi bi-check-circle-fill"></i> ¡Tomado!';
+        btn.classList.add('confirmado');
+        setTimeout(() => {
+            btn.innerHTML = '<i class="bi bi-check-circle"></i> Dato tomado';
+            btn.classList.remove('confirmado');
+        }, 2000);
+    });
+
     $(document).ready(function() {
+        cargarModoLuxometro();
+
         // Cada toma tiene su propio botón: nunca se envía el par completo.
         document.querySelectorAll('.eje-chip').forEach(chip => {
             const grupo = `${chip.dataset.tipo === 'anti' ? 'anti' : chip.dataset.tipo}_${chip.dataset.lado}`;
