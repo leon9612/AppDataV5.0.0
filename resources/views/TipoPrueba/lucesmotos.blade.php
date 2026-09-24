@@ -73,13 +73,13 @@
                                                             <div style="margin-bottom: 15px;">
                                                                 <div class="input-group" style="align-content: center">
                                                                     <div class="form-floating" style="width: 100%;">
-                                                                        <input type="text" class="form-control" name="baja_derecha"
-                                                                            id="baja_derecha" placeholder="1"
-                                                                            value="{{ old('baja_derecha') }}">
-                                                                        <label for="baja_derecha">BAJA 1</label>
-                                                                        @if ($errors->has('baja_derecha'))
+                                                                        <input type="text" class="form-control" name="baja_moto"
+                                                                            id="baja_moto" placeholder="1"
+                                                                            value="{{ old('baja_moto') }}">
+                                                                        <label for="baja_moto">BAJA 1</label>
+                                                                        @if ($errors->has('baja_moto'))
                                                                         <span
-                                                                            class="error text-danger">{{ $errors->first('baja_derecha') }}</span>
+                                                                            class="error text-danger">{{ $errors->first('baja_moto') }}</span>
                                                                         @endif
                                                                     </div>
                                                                 </div>
@@ -89,13 +89,13 @@
                                                             <div style="margin-bottom: 15px;">
                                                                 <div class="input-group" style="align-content: center">
                                                                     <div class="form-floating" style="width: 100%;">
-                                                                        <input type="text" class="form-control" name="baja_derecha1"
-                                                                            id="baja_derecha1" placeholder="1"
-                                                                            value="{{ old('baja_derecha1') }}">
-                                                                        <label for="baja_derecha1">BAJA 2</label>
-                                                                        @if ($errors->has('baja_derecha1'))
+                                                                        <input type="text" class="form-control" name="baja_moto1"
+                                                                            id="baja_moto1" placeholder="1"
+                                                                            value="{{ old('baja_moto1') }}">
+                                                                        <label for="baja_moto1">BAJA 2</label>
+                                                                        @if ($errors->has('baja_moto1'))
                                                                         <span
-                                                                            class="error text-danger">{{ $errors->first('baja_derecha1') }}</span>
+                                                                            class="error text-danger">{{ $errors->first('baja_moto1') }}</span>
                                                                         @endif
                                                                     </div>
                                                                 </div>
@@ -105,13 +105,13 @@
                                                             <div style="margin-bottom: 15px;">
                                                                 <div class="input-group" style="align-content: center">
                                                                     <div class="form-floating" style="width: 100%;">
-                                                                        <input type="text" class="form-control" name="baja_derecha2"
-                                                                            id="baja_derecha2" placeholder="1"
-                                                                            value="{{ old('baja_derecha2') }}">
-                                                                        <label for="baja_derecha2">BAJA 3</label>
-                                                                        @if ($errors->has('baja_derecha2'))
+                                                                        <input type="text" class="form-control" name="baja_moto2"
+                                                                            id="baja_moto2" placeholder="1"
+                                                                            value="{{ old('baja_moto2') }}">
+                                                                        <label for="baja_moto2">BAJA 3</label>
+                                                                        @if ($errors->has('baja_moto2'))
                                                                         <span
-                                                                            class="error text-danger">{{ $errors->first('baja_derecha2') }}</span>
+                                                                            class="error text-danger">{{ $errors->first('baja_moto2') }}</span>
                                                                         @endif
                                                                     </div>
                                                                 </div>
@@ -407,7 +407,7 @@
                             }
 
                             if (res.observacion == 'baja_derecha')
-                                $("#baja_derecha").val(res.valor);
+                                $("#baja_moto").val(res.valor);
                             if (res.observacion == 'inclinacion_derecha')
                                 $("#incli_derecha").val(res.valor);
 
