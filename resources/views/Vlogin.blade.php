@@ -591,10 +591,143 @@
         .ls-btn-clear:hover {
             background: rgba(168, 85, 247, 0.15);
         }
+
+        /* ── Pantalla de carga: se ve mientras se configura la conexión y se valida licencia/dispositivo ── */
+        .carga-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1050; /* debajo de SweetAlert (1060) para que los prompts de dominio/url se vean encima */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0a0e1a;
+            transition: opacity .45s ease, visibility .45s ease;
+        }
+
+        .carga-overlay.oculta {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .carga-box {
+            width: min(360px, calc(100vw - 32px));
+            text-align: center;
+            color: #e2e8f0;
+        }
+
+        .carga-logo {
+            width: 100%;
+            max-width: 220px;
+            margin-bottom: 28px;
+            animation: carga-pulso 2s ease-in-out infinite;
+        }
+
+        @keyframes carga-pulso {
+            50% {
+                opacity: .55;
+            }
+        }
+
+        .carga-barra {
+            height: 4px;
+            border-radius: 4px;
+            background: rgba(148, 163, 184, 0.15);
+            overflow: hidden;
+            margin-bottom: 22px;
+        }
+
+        .carga-barra-fill {
+            height: 100%;
+            width: 0;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #38bdf8, #8b5cf6);
+            transition: width .5s ease;
+        }
+
+        .carga-pasos {
+            list-style: none;
+            text-align: left;
+            font-size: .9rem;
+        }
+
+        .carga-pasos li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 0;
+            color: #475569;
+            transition: color .3s;
+        }
+
+        .carga-pasos .carga-icono {
+            width: 1.1rem;
+            height: 1.1rem;
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 2px solid currentColor;
+            font-size: .7rem;
+        }
+
+        .carga-pasos li.activo {
+            color: #e2e8f0;
+        }
+
+        .carga-pasos li.activo .carga-icono {
+            border-color: rgba(56, 189, 248, 0.25);
+            border-top-color: #38bdf8;
+            animation: girar-login .8s linear infinite;
+        }
+
+        .carga-pasos li.hecho {
+            color: #94a3b8;
+        }
+
+        .carga-pasos li.hecho .carga-icono {
+            border-color: #22c55e;
+            background: #22c55e;
+            color: #0a0e1a;
+        }
+
+        .carga-pasos li.hecho .carga-icono::before {
+            content: "¹3";
+            font-weight: 700;
+        }
+
+        .carga-pasos li.fallo {
+            color: #f87171;
+        }
+
+        .carga-pasos li.fallo .carga-icono::before {
+            content: "¹5";
+            font-weight: 700;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .carga-logo,
+            .carga-pasos li.activo .carga-icono {
+                animation: none;
+            }
+        }
     </style>
 </head>
 
 <body>
+
+    <!-- Pantalla de carga (restric.js la avanza con cargaLogin.paso / cargaLogin.fin) -->
+    <div class="carga-overlay" id="cargaLogin" role="status" aria-live="polite">
+        <div class="carga-box">
+            <img src="{{ asset('assets/img/datasim.png') }}" alt="DataSim" class="carga-logo">
+            <div class="carga-barra"><div class="carga-barra-fill" id="cargaBarra"></div></div>
+            <ul class="carga-pasos">
+                <li data-paso="recursos" class="activo"><span class="carga-icono"></span>Cargando recursos</li>
+                <li data-paso="conexion"><span class="carga-icono"></span>Configurando conexión con el servidor</li>
+                <li data-paso="licencia"><span class="carga-icono"></span>Validando licencia y dispositivo</li>
+            </ul>
+        </div>
+    </div>
 
     <!-- Fondo -->
     <div class="bg-grid"></div>
@@ -717,7 +850,36 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Custom JS (tuyo, sin cambios) -->
+    <script>window.DOMINIO_APP = @json(config('app.dominio'));</script>
     <script src="{{ asset('assets/data/restric.js') }}?v={{ time() }}"></script>
+
+    <script>
+        // ── Pantalla de carga: restric.js marca el paso en curso; los anteriores quedan como hechos ──
+        const cargaLogin = (function() {
+            const overlay = document.getElementById('cargaLogin');
+            const pasos = Array.from(overlay.querySelectorAll('[data-paso]'));
+            const barra = document.getElementById('cargaBarra');
+
+            function marcar(nombre, estadoActual) {
+                const idx = pasos.findIndex(li => li.dataset.paso === nombre);
+                pasos.forEach((li, i) => {
+                    li.className = i < idx ? 'hecho' : (i === idx ? estadoActual : '');
+                });
+                barra.style.width = Math.round((idx + (estadoActual === 'hecho' ? 1 : 0.5)) / pasos.length * 100) + '%';
+            }
+
+            return {
+                paso: (nombre) => marcar(nombre, 'activo'),
+                // ok=false: se marca el paso como fallido y se quita la pantalla para mostrar el aviso de bloqueo
+                fin: (ok = true) => {
+                    const actual = pasos.find(li => li.classList.contains('activo')) || pasos[pasos.length - 1];
+                    marcar(actual.dataset.paso, ok ? 'hecho' : 'fallo');
+                    setTimeout(() => overlay.classList.add('oculta'), ok ? 450 : 0);
+                }
+            };
+        })();
+        cargaLogin.paso('recursos');
+    </script>
 
     <script>
         // ── Toggle contraseña ──
@@ -1064,7 +1226,7 @@
         // ── Tu función original bajarLineas (sin cambios) ──
         let bajarLineas = () => {
             $.ajax({
-                 url: 'https://' + localStorage.getItem('dominio') + '/cda/index.php/Cservicio/getLineas',
+                 url: 'https://' + (window.DOMINIO_APP || localStorage.getItem('dominio')) + '/cda/index.php/Cservicio/getLineas',
                 //url: 'https://cdatecmmas.tecmmas.com/cda/index.php/Cservicio/getLineas',
                 method: 'GET',
                 success: function(data) {
@@ -1144,4 +1306,4 @@
     </script>
 </body>
 
-</html>
+</html>

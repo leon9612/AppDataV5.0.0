@@ -33,6 +33,7 @@
 
     <!-- Template Main JS File -->
     <script src="{{asset('assets/js/main.js')}}"></script>
+    <script>window.DOMINIO_APP = @json(config('app.dominio'));</script>
     <script src="{{ asset('assets/data/restric.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('assets/data/getdatamachine.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('assets/data/valid.js') }}?v={{ time() }}"></script>
