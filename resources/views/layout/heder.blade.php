@@ -38,98 +38,99 @@
             overflow-x: hidden;
         }
 
-        /* Header/Menú */
+        /* ================= MENÚ LATERAL =================
+           PC (>= 992px): barra lateral fija.
+           Celular/tablet: barra superior + menú deslizable con fondo difuminado. */
+        :root {
+            --sb-width: 272px;
+            --sb-bg: #0b1220;
+            --sb-bg-2: #111b2e;
+            --sb-text: #9aa6bd;
+            --sb-text-hover: #e8edf6;
+            --sb-accent: #3b82f6;
+            --sb-accent-soft: rgba(59, 130, 246, 0.16);
+            --sb-border: rgba(255, 255, 255, 0.06);
+            --topbar-h: 58px;
+        }
+
         #header {
             position: fixed;
             top: 0;
-            left: -300px;
-            width: 300px;
+            left: 0;
+            width: var(--sb-width);
+            max-width: 86vw;
             height: 100vh;
-            background: var(--bg-dark);
-            transition: left 0.3s ease;
-            z-index: 9999;
-            overflow-y: auto;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(180deg, var(--sb-bg) 0%, var(--sb-bg-2) 100%);
+            border-right: 1px solid var(--sb-border);
+            z-index: 1045;
+            transform: translateX(-100%);
+            transition: transform 0.28s cubic-bezier(.4, 0, .2, 1), box-shadow 0.28s;
+            font-family: 'Inter', 'Open Sans', sans-serif;
         }
 
         #header.menu-abierto {
-            left: 0;
+            transform: translateX(0);
+            box-shadow: 12px 0 40px rgba(0, 0, 0, 0.35);
         }
 
-        /* Botón móvil */
-        .mobile-nav-toggle {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            width: 45px;
-            height: 45px;
-            background: var(--primary-color);
-            color: white;
+        /* Marca */
+        .sb-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 16px 18px 18px;
+            border-bottom: 1px solid var(--sb-border);
+        }
+
+        .sb-brand img {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            /* datasim.png es horizontal (ícono + texto): solo se muestra el ícono */
+            object-fit: cover;
+            object-position: 2% center;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.35);
+        }
+
+        .sb-brand-text strong {
+            display: block;
+            color: #fff;
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            line-height: 1.2;
+        }
+
+        .sb-brand-text small {
+            color: var(--sb-text);
+            font-size: 0.75rem;
+        }
+
+        .sb-close {
+            margin-left: auto;
+            width: 34px;
+            height: 34px;
+            flex-shrink: 0;
             border: none;
-            border-radius: 5px;
-            font-size: 24px;
-            cursor: pointer;
-            z-index: 10000;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--sb-text-hover);
+            font-size: 1.1rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
-        .mobile-nav-toggle:hover {
-            background: #1179b8;
-        }
-
-        /* Overlay cuando el menú está abierto */
-        .menu-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 9998;
-        }
-
-        .menu-overlay.active {
-            display: block;
-        }
-
-        /* Perfil */
-        .profile {
-            text-align: center;
-            padding: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .profile img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 3px solid var(--primary-color);
-        }
-
-        .profile h1 {
-            color: var(--text-light);
-            font-size: 1.5rem;
-            margin: 10px 0 5px;
-        }
-
-        .profile h1 a {
-            color: var(--text-light);
-            text-decoration: none;
-        }
-
-        .profile p {
-            color: var(--text-gray);
-            font-size: 0.9rem;
-            margin: 0;
-        }
-
-        /* Menú de navegación */
+        /* Navegación */
         .nav-menu {
-            padding: 15px 0;
+            flex: 1;
+            overflow-y: auto;
+            padding: 4px 12px 16px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
         }
 
         .nav-menu ul {
@@ -138,104 +139,332 @@
             margin: 0;
         }
 
-        .nav-menu li {
-            margin-bottom: 2px;
+        .sb-section {
+            color: #5d6b85;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            padding: 16px 12px 6px;
         }
 
-        .nav-menu a {
+        .sb-link {
             display: flex;
             align-items: center;
-            padding: 12px 20px;
-            color: var(--text-gray);
+            gap: 12px;
+            width: 100%;
+            padding: 8px 10px;
+            margin-bottom: 2px;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            color: var(--sb-text);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: left;
             text-decoration: none;
-            font-size: 15px;
-            transition: all 0.3s;
             cursor: pointer;
+            transition: background 0.18s, color 0.18s;
         }
 
-        .nav-menu a i {
-            font-size: 18px;
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
+        .sb-link .sb-icon {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.04);
+            font-size: 1rem;
+            transition: background 0.18s, color 0.18s;
         }
 
-        .nav-menu a:hover {
-            color: var(--text-light);
-            background: var(--primary-color);
+        .sb-link:hover,
+        .sb-link:focus-visible {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--sb-text-hover);
+            outline: none;
         }
 
-        .nav-menu a:hover i {
-            color: var(--text-light);
+        .sb-link.activo {
+            background: var(--sb-accent-soft);
+            color: #fff;
         }
 
-        /* Submenús */
-        .nav-item {
-            position: relative;
+        .sb-link.activo .sb-icon {
+            background: var(--sb-accent);
+            color: #fff;
+            box-shadow: 0 6px 14px rgba(59, 130, 246, 0.35);
         }
 
-        .submenu-icon {
+        .sb-chevron {
             margin-left: auto;
-            transition: transform 0.3s;
+            font-size: 0.75rem;
+            transition: transform 0.25s;
         }
 
-        .nav-item.abierto .submenu-icon {
+        .nav-item.abierto > .sb-link {
+            color: var(--sb-text-hover);
+        }
+
+        .nav-item.abierto > .sb-link .sb-chevron {
             transform: rotate(180deg);
         }
 
+        /* Submenú con animación de altura (grid 0fr -> 1fr) */
         .nav-content {
-            display: none;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 5px 0;
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.25s ease;
         }
 
-        .nav-item.abierto .nav-content {
-            display: block;
+        .nav-item.abierto > .nav-content {
+            grid-template-rows: 1fr;
+        }
+
+        .nav-content > ul {
+            min-height: 0;
+            overflow: hidden;
+            margin-left: 26px !important;
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .nav-content a {
-            padding-left: 50px;
-            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 7px 12px;
+            margin: 2px 0 2px 8px;
+            border-radius: 8px;
+            color: var(--sb-text);
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: background 0.18s, color 0.18s;
         }
 
-        .menu-badge {
-            margin-left: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 10px;
+        .nav-content a::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.45;
+            flex-shrink: 0;
         }
 
-        /* Botón cerrar sesión */
-        .mt-3 {
-            margin-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 10px;
+        .nav-content a:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--sb-text-hover);
+        }
+
+        .nav-content a.activo {
+            color: #fff;
+            background: var(--sb-accent-soft);
+        }
+
+        .nav-content a.activo::before {
+            background: var(--sb-accent);
+            opacity: 1;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+
+        /* Pie del menú: cerrar sesión */
+        .sb-footer {
+            padding: 12px;
+            border-top: 1px solid var(--sb-border);
+        }
+
+        .sb-logout {
+            margin-bottom: 0;
+            color: #f3a5a5;
+        }
+
+        .sb-logout .sb-icon {
+            background: rgba(239, 68, 68, 0.12);
+            color: #f87171;
+        }
+
+        .sb-logout:hover,
+        .sb-logout:focus-visible {
+            background: rgba(239, 68, 68, 0.12);
+            color: #fecaca;
+        }
+
+        /* Barra superior (solo celular/tablet) */
+        .app-topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--topbar-h);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 12px;
+            background: rgba(11, 18, 32, 0.94);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--sb-border);
+            z-index: 1030;
+            font-family: 'Inter', 'Open Sans', sans-serif;
+        }
+
+        .app-topbar img {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            object-fit: cover;
+            object-position: 2% center;
+        }
+
+        .app-topbar-title {
+            min-width: 0;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            line-height: 1.15;
+        }
+
+        .app-topbar-title small {
+            display: block;
+            color: var(--sb-text);
+            font-weight: 500;
+            font-size: 0.72rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .menu-toggle {
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            border: none;
+            border-radius: 12px;
+            background: var(--sb-accent);
+            color: #fff;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(4, 8, 16, 0.55);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            z-index: 1040;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.28s, visibility 0.28s;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        body.menu-bloqueado {
+            overflow: hidden;
         }
 
         /* Ajuste para contenido principal */
         main {
             padding: 20px;
-            transition: margin-left 0.3s;
+        }
+
+        /* Móvil/tablet. Hay dos <main>: el del layout (.contenido-app, con el aviso
+           de licencia) y el de cada vista (#main). Solo el primero reserva espacio
+           para la barra superior; si ambos lo hacían, el hueco se duplicaba. */
+        @media (max-width: 991.98px) {
+            main {
+                padding: 0 12px 20px;
+            }
+
+            main.contenido-app {
+                padding: calc(var(--topbar-h) + 12px) 12px 0;
+            }
+
+            .aviso-licencia {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        /* Filas de casillas armadas con display:flex en línea (luces, frenos, gases...):
+           en pantallas pequeñas pasan a 2 por fila en vez de comprimirse */
+        @media (max-width: 767.98px) {
+            .fila-campos {
+                flex-wrap: wrap;
+            }
+
+            .fila-campos > [class*="col-"] {
+                flex: 0 0 50%;
+                max-width: 50%;
+                padding: 0 4px;
+            }
+
+            .fila-campos > br {
+                display: none;
+            }
         }
 
         @media (min-width: 992px) {
             #header {
-                left: 0;
+                max-width: none;
+                transform: none;
             }
 
-            .mobile-nav-toggle {
+            .app-topbar,
+            .menu-overlay,
+            .sb-close {
                 display: none;
             }
 
-            main {
-                margin-left: 300px;
+            main,
+            #footer {
+                margin-left: var(--sb-width);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #header,
+            .nav-content,
+            .menu-overlay {
+                transition: none;
             }
         }
 
         .hidden-menu-item {
             display: none !important;
+        }
+
+        .aviso-licencia {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: 1px solid #FFE082;
+            border-left: 5px solid #E6A800;
+            background: #FFF9E6;
+            color: #7A5D00;
+            font-weight: 600;
+        }
+
+        .aviso-licencia.urgente {
+            border-color: #F5C2C7;
+            border-left-color: #DC2626;
+            background: #FDECEC;
+            color: #8A1C1C;
+        }
+
+        .aviso-licencia[hidden] {
+            display: none;
         }
 
         /* Estilos para campos fuera de rango */
@@ -537,146 +766,166 @@
 </head>
 
 <body>
-    <!-- Botón móvil -->
-    <button class="mobile-nav-toggle" id="menuToggle">
-        <i class="bi bi-list"></i>
-    </button>
-    <!-- <meta name="csrf-token" content="{{ csrf_token() }}"> -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    {{-- Módulos habilitados por la licencia (los valida el servidor, ver App\Services\Licencia).
+         Los id de cada enlace los usa restric.js para ocultar/mostrar sin recargar. --}}
+    @php
+        $modulosLicencia = session('licencia.modulos', []);
+        $habilitado = fn($id) => ($modulosLicencia[$id] ?? '0') === '1';
+        $esActual = fn($ruta) => request()->is($ruta) || request()->is($ruta . '/*');
+
+        // [ruta, id de módulo, texto]
+        $gruposMenu = [
+            ['id' => 'frenosItem', 'nav' => 'components-nav', 'icono' => 'bi-car-front-fill', 'texto' => 'Frenos', 'items' => [
+                ['al', 'ali', 'Alineación'],
+                ['fr', 'fre', 'Freno mixto'],
+                ['frm', 'frem', 'Freno motos'],
+                ['su', 'sus', 'Suspensión'],
+                ['frmotocarro', 'fremc', 'Freno motocarro'],
+            ]],
+            ['id' => 'gasesItem', 'nav' => 'components-nav1', 'icono' => 'bi-fuel-pump-diesel-fill', 'texto' => 'Gases', 'items' => [
+                ['ga', 'gase', 'Gases Mixto'],
+                ['gam', 'gasem', 'Gases Motos'],
+                ['op', 'opac', 'Opacidad'],
+            ]],
+            ['id' => 'lucesItem', 'nav' => 'components-nav2', 'icono' => 'bi-lightbulb-fill', 'texto' => 'Luces', 'items' => [
+                ['lu', 'lux', 'Luces Mixto'],
+                ['lum', 'luxm', 'Luces Motos'],
+            ]],
+        ];
+
+        // [ruta, id de módulo, icono, texto]
+        $pruebasSueltas = [
+            ['visual', 'visual', 'bi-eye', 'Visual'],
+            ['so', 'son', 'bi-mic-fill', 'Sonómetro'],
+            ['tax', 'tax', 'bi-speedometer2', 'Taxímetro'],
+        ];
+        $herramientas = [
+            ['fot', 'fot', 'bi-camera', 'Fotos'],
+            ['update', 'actu', 'bi-arrow-clockwise', 'Actualizar'],
+            ['cal', 'cal', 'bi-sliders', 'Calibración'],
+        ];
+
+        // Nombre de la pantalla actual para la barra superior en celular/tablet
+        $pantallaActual = $esActual('cpr') ? 'Dashboard' : null;
+        foreach ($gruposMenu as $g) {
+            foreach ($g['items'] as [$ruta, , $texto]) {
+                if ($esActual($ruta)) $pantallaActual = $texto;
+            }
+        }
+        foreach (array_merge($pruebasSueltas, $herramientas) as [$ruta, , , $texto]) {
+            if ($esActual($ruta)) $pantallaActual = $texto;
+        }
+    @endphp
+
+    <!-- Barra superior (celular/tablet) -->
+    <div class="app-topbar">
+        <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menú" aria-controls="header" aria-expanded="false">
+            <i class="bi bi-list"></i>
+        </button>
+        <img src="{{ asset('assets/img/datasim.png') }}" alt="">
+        <div class="app-topbar-title">
+            DataSim
+            <small>{{ $pantallaActual ?? 'Bienvenido al sistema' }}</small>
+        </div>
+    </div>
 
     <!-- Overlay -->
     <div class="menu-overlay" id="menuOverlay"></div>
 
-    <!-- Header -->
-    <header id="header">
-        <div class="profile">
+    <!-- Menú lateral -->
+    <header id="header" aria-label="Menú principal">
+        <div class="sb-brand">
             <img src="{{ asset('assets/img/datasim.png') }}" alt="Logo">
-            <br><br>
-            <p>Bienvenido al sistema</p>
+            <div class="sb-brand-text">
+                <strong>DataSim</strong>
+                <small>Bienvenido al sistema</small>
+            </div>
+            <button class="sb-close" id="menuClose" type="button" aria-label="Cerrar menú">
+                <i class="bi bi-x-lg"></i>
+            </button>
         </div>
 
         <nav class="nav-menu">
             <ul>
-                <!-- Dashboard -->
                 <li class="nav-item">
-                    <a href="{{ url('/cpr') }}" id="dashboard-link">
-                        <i class="bi bi-house"></i>
+                    <a href="{{ url('/cpr') }}" id="dashboard-link" @class(['sb-link', 'activo' => $esActual('cpr')])>
+                        <span class="sb-icon"><i class="bi bi-grid-1x2-fill"></i></span>
                         <span>Dashboard</span>
                     </a>
                 </li>
+            </ul>
 
-                <!-- Frenos -->
-                <li class="nav-item" id="frenosItem">
-                    <a class="nav-link" onclick="toggleSubmenu('components-nav')">
-                        <i class="bi bi-car-front-fill"></i>
-                        <span>Frenos</span>
-                        <i class="bi bi-chevron-down submenu-icon"></i>
-                        <span class="menu-badge"></span>
-                    </a>
-                    <div class="nav-content" id="components-nav">
+            <div class="sb-section">Pruebas</div>
+            <ul>
+                @foreach ($gruposMenu as $grupo)
+                @php
+                    $grupoActivo = collect($grupo['items'])->contains(fn($i) => $esActual($i[0]));
+                    $grupoVisible = collect($grupo['items'])->contains(fn($i) => $habilitado($i[1]));
+                @endphp
+                <li id="{{ $grupo['id'] }}" @class(['nav-item', 'abierto' => $grupoActivo, 'hidden-menu-item' => !$grupoVisible])>
+                    <button type="button" class="sb-link" onclick="toggleSubmenu('{{ $grupo['nav'] }}')"
+                        aria-expanded="{{ $grupoActivo ? 'true' : 'false' }}" aria-controls="{{ $grupo['nav'] }}">
+                        <span class="sb-icon"><i class="bi {{ $grupo['icono'] }}"></i></span>
+                        <span>{{ $grupo['texto'] }}</span>
+                        <i class="bi bi-chevron-down sb-chevron"></i>
+                    </button>
+                    <div class="nav-content" id="{{ $grupo['nav'] }}">
                         <ul>
-                            <li><a href="{{ url('/al') }}" id="ali"><i class="bi bi-gear-fill"></i>Alineación</a></li>
-                            <li><a href="{{ url('/fr') }}" id="fre"><i class="bi bi-gear-fill"></i>Freno mixto</a></li>
-                            <li><a href="{{ url('/frm') }}" id="frem"><i class="bi bi-gear-fill"></i>Freno motos</a></li>
-                            <li><a href="{{ url('/su') }}" id="sus"><i class="bi bi-gear-fill"></i>Suspensión</a></li>
-                            <li><a href="{{ url('/frmotocarro') }}" id="fremc"><i class="bi bi-gear-fill"></i>Freno motocarro</a></li>
+                            @foreach ($grupo['items'] as [$ruta, $modulo, $texto])
+                            <li><a href="{{ url('/' . $ruta) }}" id="{{ $modulo }}" @class(['activo' => $esActual($ruta), 'hidden-menu-item' => !$habilitado($modulo)])>{{ $texto }}</a></li>
+                            @endforeach
                         </ul>
                     </div>
                 </li>
+                @endforeach
 
-                <!-- Gases -->
-                <li class="nav-item" id="gasesItem">
-                    <a class="nav-link" onclick="toggleSubmenu('components-nav1')">
-                        <i class="bi bi-fuel-pump-diesel-fill"></i>
-                        <span>Gases</span>
-                        <i class="bi bi-chevron-down submenu-icon"></i>
-                        <span class="menu-badge"></span>
-                    </a>
-                    <div class="nav-content" id="components-nav1">
-                        <ul>
-                            <li><a href="{{ url('/ga') }}" id="gase"><i class="bi bi-gear-fill"></i>Gases Mixto</a></li>
-                            <li><a href="{{ url('/gam') }}" id="gasem"><i class="bi bi-gear-fill"></i>Gases Motos</a></li>
-                            <li><a href="{{ url('/op') }}" id="opac"><i class="bi bi-gear-fill"></i>Opacidad</a></li>
-                        </ul>
-                    </div>
-                </li>
-
-                <!-- Luces -->
-                <li class="nav-item" id="lucesItem">
-                    <a class="nav-link" onclick="toggleSubmenu('components-nav2')">
-                        <i class="bi bi-lightbulb-fill"></i>
-                        <span>Luces</span>
-                        <i class="bi bi-chevron-down submenu-icon"></i>
-                        <span class="menu-badge"></span>
-                    </a>
-                    <div class="nav-content" id="components-nav2">
-                        <ul>
-                            <li><a href="{{ url('/lu') }}" id="lux"><i class="bi bi-gear-fill"></i>Luces Mixto</a></li>
-                            <li><a href="{{ url('/lum') }}" id="luxm"><i class="bi bi-gear-fill"></i>Luces Motos</a></li>
-                        </ul>
-                    </div>
-                </li>
-
-                <!-- Visual -->
+                @foreach ($pruebasSueltas as [$ruta, $modulo, $icono, $texto])
                 <li class="nav-item">
-                    <a href="{{ url('/visual') }}" id="visual">
-                        <i class="bi bi-eye"></i>
-                        <span>Visual</span>
+                    <a href="{{ url('/' . $ruta) }}" id="{{ $modulo }}" @class(['sb-link', 'activo' => $esActual($ruta), 'hidden-menu-item' => !$habilitado($modulo)])>
+                        <span class="sb-icon"><i class="bi {{ $icono }}"></i></span>
+                        <span>{{ $texto }}</span>
                     </a>
                 </li>
+                @endforeach
+            </ul>
 
-                <!-- Sonómetro -->
+            <div class="sb-section">Herramientas</div>
+            <ul>
+                @foreach ($herramientas as [$ruta, $modulo, $icono, $texto])
                 <li class="nav-item">
-                    <a href="{{ url('/so') }}" id="son">
-                        <i class="bi bi-mic-fill"></i>
-                        <span>Sonómetro</span>
+                    <a href="{{ url('/' . $ruta) }}" id="{{ $modulo }}" @class(['sb-link', 'activo' => $esActual($ruta), 'hidden-menu-item' => !$habilitado($modulo)])>
+                        <span class="sb-icon"><i class="bi {{ $icono }}"></i></span>
+                        <span>{{ $texto }}</span>
                     </a>
                 </li>
-
-                <!-- Taxímetro -->
-                <li class="nav-item">
-                    <a href="{{ url('/tax') }}" id="tax">
-                        <i class="bi bi-speedometer2"></i>
-                        <span>Taxímetro</span>
-                    </a>
-                </li>
-
-                <!-- Fotos -->
-                <li class="nav-item">
-                    <a href="{{ url('/fot') }}" id="fot">
-                        <i class="bi bi-camera"></i>
-                        <span>Fotos</span>
-                    </a>
-                </li>
-
-                <!-- Actualizar -->
-                <li class="nav-item">
-                    <a href="{{ url('/update') }}" id="actu">
-                        <i class="bi bi-arrow-clockwise"></i>
-                        <span>Actualizar</span>
-                    </a>
-                </li>
-
-                <!-- Calibración -->
-                <li class="nav-item">
-                    <a href="{{ url('/cal') }}" id="cal">
-                        <i class="bi bi-sliders"></i>
-                        <span>Calibración</span>
-                    </a>
-                </li>
-
-                <!-- Cerrar sesión -->
-                <li class="nav-item mt-3">
-                    <a href="{{ url('/close') }}" id="close">
-                        <i class="bi bi-box-arrow-left"></i>
-                        <span>Cerrar sesión</span>
-                    </a>
-                </li>
+                @endforeach
             </ul>
         </nav>
+
+        <div class="sb-footer">
+            <a href="{{ url('/close') }}" id="close" class="sb-link sb-logout">
+                <span class="sb-icon"><i class="bi bi-box-arrow-left"></i></span>
+                <span>Cerrar sesión</span>
+            </a>
+        </div>
     </header>
 
     <!-- Main Content -->
-    <main>
+    <main class="contenido-app">
+        {{-- Aviso de vencimiento: visible cuando faltan pocos días (lo actualiza restric.js al validar la licencia) --}}
+        @php($diasLicencia = session('licencia.diasRestantes'))
+        <div id="avisoVencimientoLicencia" @class(['aviso-licencia', 'urgente' => is_int($diasLicencia) && $diasLicencia <= 3]) role="alert"
+            @if (!is_int($diasLicencia) || $diasLicencia < 1 || $diasLicencia > 7) hidden @endif>
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <span id="avisoVencimientoLicenciaTexto">
+                @if (is_int($diasLicencia))
+                {{ $diasLicencia === 1 ? 'Su licencia expira MAÑANA' : "Su licencia expira en {$diasLicencia} días" }}
+                ({{ session('licencia.fechavigencia') }}). Comuníquese con el administrador para renovarla.
+                @endif
+            </span>
+        </div>
         @yield('content')
     </main>
 
@@ -684,66 +933,54 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Función para toggle del menú móvil
         document.addEventListener('DOMContentLoaded', function() {
             const header = document.getElementById('header');
             const menuToggle = document.getElementById('menuToggle');
+            const menuClose = document.getElementById('menuClose');
             const menuOverlay = document.getElementById('menuOverlay');
+            const esMovil = () => window.innerWidth < 992;
 
-            // Abrir/cerrar menú
-            menuToggle.addEventListener('click', function() {
-                header.classList.toggle('menu-abierto');
-                menuOverlay.classList.toggle('active');
+            function abrirMenu(abrir) {
+                header.classList.toggle('menu-abierto', abrir);
+                menuOverlay.classList.toggle('active', abrir);
+                document.body.classList.toggle('menu-bloqueado', abrir);
+                menuToggle.setAttribute('aria-expanded', abrir ? 'true' : 'false');
+                menuToggle.querySelector('i').className = abrir ? 'bi bi-x-lg' : 'bi bi-list';
+            }
 
-                // Cambiar ícono
-                const icon = this.querySelector('i');
-                if (header.classList.contains('menu-abierto')) {
-                    icon.className = 'bi bi-x';
-                } else {
-                    icon.className = 'bi bi-list';
-                }
+            menuToggle.addEventListener('click', () => abrirMenu(!header.classList.contains('menu-abierto')));
+            menuClose.addEventListener('click', () => abrirMenu(false));
+            menuOverlay.addEventListener('click', () => abrirMenu(false));
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape' && header.classList.contains('menu-abierto')) abrirMenu(false);
+            });
+            // Al pasar a PC (girar tablet, redimensionar) no dejar el scroll bloqueado
+            window.addEventListener('resize', () => {
+                if (!esMovil() && header.classList.contains('menu-abierto')) abrirMenu(false);
             });
 
-            // Cerrar menú al hacer clic en overlay
-            menuOverlay.addEventListener('click', function() {
-                header.classList.remove('menu-abierto');
-                menuOverlay.classList.remove('active');
-                menuToggle.querySelector('i').className = 'bi bi-list';
+            // Cerrar menú al elegir una opción (solo celular/tablet)
+            header.querySelectorAll('a[href]').forEach(link => {
+                link.addEventListener('click', () => { if (esMovil()) abrirMenu(false); });
             });
 
-            // Cerrar menú al hacer clic en enlaces (solo en móvil)
-            const navLinks = document.querySelectorAll('.nav-menu a[href]');
-            navLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    if (window.innerWidth < 992) {
-                        header.classList.remove('menu-abierto');
-                        menuOverlay.classList.remove('active');
-                        menuToggle.querySelector('i').className = 'bi bi-list';
-                    }
-                });
-            });
-
-            // Manejar submenús en todos los tamaños de pantalla
             window.toggleSubmenu = function(id) {
-                const submenu = document.getElementById(id);
-                const parentItem = submenu.closest('.nav-item');
-
-                if (submenu.style.display === 'block') {
-                    submenu.style.display = 'none';
-                    parentItem.classList.remove('abierto');
-                } else {
-                    submenu.style.display = 'block';
-                    parentItem.classList.add('abierto');
-                }
+                const item = document.getElementById(id).closest('.nav-item');
+                const abierto = item.classList.toggle('abierto');
+                item.querySelector(':scope > .sb-link').setAttribute('aria-expanded', abierto ? 'true' : 'false');
             };
 
-            // Si hay un submenú abierto al cargar la página
-            const activeSubmenus = document.querySelectorAll('.nav-content[style="display: block;"]');
-            activeSubmenus.forEach(submenu => {
-                const parentItem = submenu.closest('.nav-item');
-                if (parentItem) {
-                    parentItem.classList.add('abierto');
-                }
+            // Un grupo (Frenos, Gases, Luces) se oculta si ninguno de sus módulos está
+            // habilitado; restric.js puede cambiarlos sin recargar, así que se recalcula.
+            const grupos = Array.from(header.querySelectorAll('.nav-content'), n => n.closest('.nav-item'));
+            const actualizarGrupos = () => grupos.forEach(grupo => {
+                const visibles = grupo.querySelectorAll('.nav-content a:not(.hidden-menu-item)').length;
+                grupo.classList.toggle('hidden-menu-item', visibles === 0);
+            });
+            new MutationObserver(actualizarGrupos).observe(header.querySelector('.nav-menu'), {
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['class'],
             });
         });
     </script>

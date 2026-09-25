@@ -79,3 +79,5 @@
         </div>
     </div>
 </div>
+
+<x-instrucciones-simulador prueba="sonometría" :mostrar-buscar="false" />

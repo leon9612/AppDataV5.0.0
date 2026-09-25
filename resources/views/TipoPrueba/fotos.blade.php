@@ -252,6 +252,24 @@
             .table-container {
                 font-size: 14px;
             }
+
+            /* En celulares el min-width de 300px + rellenos desbordaba la pantalla */
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .canvas-section,
+            .controls-section {
+                min-width: 0;
+            }
+
+            .controls-section {
+                padding: 12px;
+            }
         }
     </style>
 </head>

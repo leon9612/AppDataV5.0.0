@@ -55,19 +55,19 @@
                                                     <label
                                                         style="color: rgb(0, 4, 255); font-size: 18px; text-align: center; width: 100%; background-color: lightgoldenrodyellow">LUCES
                                                         BAJAS</label>
-                                                    <div style="justify-content: center; display: flex; margin-top: 15px">
+                                                    <div class="fila-campos" style="justify-content: center; display: flex; margin-top: 15px">
 
                                                         <br>
                                                         <div class="col-sm-12 col-md-2 col-lg-2" style="align-content: center">
                                                             <div class="input-group mb-3" style="align-content: center">
                                                                 <div class="form-floating mb-3">
-                                                                    <input type="text" class="form-control" name="baja_derecha"
-                                                                        id="baja_derecha" placeholder="1"
-                                                                        value="{{ old('baja_derecha') }}">
+                                                                    <input type="text" class="form-control" name="mix_baja_derecha"
+                                                                        id="mix_baja_derecha" placeholder="1"
+                                                                        value="{{ old('mix_baja_derecha') }}">
                                                                     <label for="floatingInput">BAJA D</label>
-                                                                    @if ($errors->has('baja_derecha'))
+                                                                    @if ($errors->has('mix_baja_derecha'))
                                                                     <span
-                                                                        class="error text-danger">{{ $errors->first('baja_derecha') }}</span>
+                                                                        class="error text-danger">{{ $errors->first('mix_baja_derecha') }}</span>
                                                                     @endif
                                                                 </div>
 
@@ -77,12 +77,12 @@
                                                             <div class="input-group mb-3" style="align-content: center">
                                                                 <div class="form-floating mb-3">
                                                                     <input type="number" class="form-control" step="0.01"
-                                                                        name="baja_izquierda" id="baja_izquierda" placeholder="1"
-                                                                        value="{{ old('baja_izquierda') }}">
+                                                                        name="mix_baja_izquierda" id="mix_baja_izquierda" placeholder="1"
+                                                                        value="{{ old('mix_baja_izquierda') }}">
                                                                     <label for="floatingInput">BAJA I</label>
-                                                                    @if ($errors->has('baja_izquierda'))
+                                                                    @if ($errors->has('mix_baja_izquierda'))
                                                                     <span
-                                                                        class="error text-danger">{{ $errors->first('baja_izquierda') }}</span>
+                                                                        class="error text-danger">{{ $errors->first('mix_baja_izquierda') }}</span>
                                                                     @endif
                                                                 </div>
 
@@ -91,13 +91,13 @@
                                                         <div class="col-sm-12 col-md-2 col-lg-2" style="align-content: center">
                                                             <div class="input-group mb-3" style="align-content: center">
                                                                 <div class="form-floating mb-3">
-                                                                    <input type="text" class="form-control" name="baja_derecha_1"
-                                                                        id="baja_derecha_1" placeholder="1"
-                                                                        value="{{ old('baja_derecha_1') }}">
+                                                                    <input type="text" class="form-control" name="mix_baja_derecha_1"
+                                                                        id="mix_baja_derecha_1" placeholder="1"
+                                                                        value="{{ old('mix_baja_derecha_1') }}">
                                                                     <label for="floatingInput">BAJA D-1</label>
-                                                                    @if ($errors->has('baja_derecha_1'))
+                                                                    @if ($errors->has('mix_baja_derecha_1'))
                                                                     <span
-                                                                        class="error text-danger">{{ $errors->first('baja_derecha_1') }}</span>
+                                                                        class="error text-danger">{{ $errors->first('mix_baja_derecha_1') }}</span>
                                                                     @endif
                                                                 </div>
 
@@ -107,12 +107,12 @@
                                                             <div class="input-group mb-3" style="align-content: center">
                                                                 <div class="form-floating mb-3">
                                                                     <input type="number" class="form-control" step="0.01"
-                                                                        name="baja_izquierda_1" id="baja_izquierda_1" placeholder="1"
-                                                                        value="{{ old('baja_izquierda_1') }}">
+                                                                        name="mix_baja_izquierda_1" id="mix_baja_izquierda_1" placeholder="1"
+                                                                        value="{{ old('mix_baja_izquierda_1') }}">
                                                                     <label for="floatingInput">BAJA I-1</label>
-                                                                    @if ($errors->has('baja_izquierda_1'))
+                                                                    @if ($errors->has('mix_baja_izquierda_1'))
                                                                     <span
-                                                                        class="error text-danger">{{ $errors->first('baja_izquierda_1') }}</span>
+                                                                        class="error text-danger">{{ $errors->first('mix_baja_izquierda_1') }}</span>
                                                                     @endif
                                                                 </div>
 
@@ -137,17 +137,17 @@
                                                     <label
                                                         style="color: rgb(0, 4, 255); font-size: 18px; text-align: center; width: 100%; background-color: lightgoldenrodyellow">LUCES
                                                         ALTAS</label>
-                                                    <div style="justify-content: center; display: flex; margin-top: 15px">
+                                                    <div class="fila-campos" style="justify-content: center; display: flex; margin-top: 15px">
                                                         <div class="col-sm-12 col-md-2 col-lg-2" style="align-content: center">
                                                             <div class="input-group mb-3" style="align-content: center">
                                                                 <div class="form-floating mb-3">
-                                                                    <input type="text" class="form-control" name="alta_derecha"
-                                                                        id="alta_derecha" placeholder="1"
-                                                                        value="{{ old('alta_derecha') }}">
+                                                                    <input type="text" class="form-control" name="mix_alta_derecha"
+                                                                        id="mix_alta_derecha" placeholder="1"
+                                                                        value="{{ old('mix_alta_derecha') }}">
                                                                     <label for="floatingInput">ALTA D</label>
-                                                                    @if ($errors->has('alta_derecha'))
+                                                                    @if ($errors->has('mix_alta_derecha'))
                                                                     <span
-                                                                        class="error text-danger">{{ $errors->first('alta_derecha') }}</span>
+                                                                        class="error text-danger">{{ $errors->first('mix_alta_derecha') }}</span>
                                                                     @endif
                                                                 </div>
 
@@ -157,12 +157,12 @@
                                                             <div class="input-group mb-3" style="align-content: center">
                                                                 <div class="form-floating mb-3">
                                                                     <input type="number" class="form-control" step="0.01"
-                                                                        name="alta_izquierda" id="alta_izquierda" placeholder="1"
-                                                                        value="{{ old('alta_izquierda') }}">
+                                                                        name="mix_alta_izquierda" id="mix_alta_izquierda" placeholder="1"
+                                                                        value="{{ old('mix_alta_izquierda') }}">
                                                                     <label for="floatingInput">ALTA I</label>
-                                                                    @if ($errors->has('alta_izquierda'))
+                                                                    @if ($errors->has('mix_alta_izquierda'))
                                                                     <span
-                                                                        class="error text-danger">{{ $errors->first('alta_izquierda') }}</span>
+                                                                        class="error text-danger">{{ $errors->first('mix_alta_izquierda') }}</span>
                                                                     @endif
                                                                 </div>
 
@@ -171,13 +171,13 @@
                                                         <div class="col-sm-12 col-md-2 col-lg-2" style="align-content: center">
                                                             <div class="input-group mb-3" style="align-content: center">
                                                                 <div class="form-floating mb-3">
-                                                                    <input type="text" class="form-control" name="alta_derecha_1"
-                                                                        id="alta_derecha_1" placeholder="1"
-                                                                        value="{{ old('alta_derecha_1') }}">
+                                                                    <input type="text" class="form-control" name="mix_alta_derecha_1"
+                                                                        id="mix_alta_derecha_1" placeholder="1"
+                                                                        value="{{ old('mix_alta_derecha_1') }}">
                                                                     <label for="floatingInput">ALTA D-1</label>
-                                                                    @if ($errors->has('alta_derecha_1'))
+                                                                    @if ($errors->has('mix_alta_derecha_1'))
                                                                     <span
-                                                                        class="error text-danger">{{ $errors->first('alta_derecha_1') }}</span>
+                                                                        class="error text-danger">{{ $errors->first('mix_alta_derecha_1') }}</span>
                                                                     @endif
                                                                 </div>
 
@@ -187,12 +187,12 @@
                                                             <div class="input-group mb-3" style="align-content: center">
                                                                 <div class="form-floating mb-3">
                                                                     <input type="number" class="form-control" step="0.01"
-                                                                        name="alta_izquierda_1" id="alta_izquierda_1" placeholder="1"
-                                                                        value="{{ old('alta_izquierda_1') }}">
+                                                                        name="mix_alta_izquierda_1" id="mix_alta_izquierda_1" placeholder="1"
+                                                                        value="{{ old('mix_alta_izquierda_1') }}">
                                                                     <label for="floatingInput">ALTA I-1</label>
-                                                                    @if ($errors->has('alta_izquierda_1'))
+                                                                    @if ($errors->has('mix_alta_izquierda_1'))
                                                                     <span
-                                                                        class="error text-danger">{{ $errors->first('alta_izquierda_1') }}</span>
+                                                                        class="error text-danger">{{ $errors->first('mix_alta_izquierda_1') }}</span>
                                                                     @endif
                                                                 </div>
 
@@ -219,16 +219,16 @@
                                             <div class="row">
                                                 <label
                                                     style="color: rgb(0, 4, 255); font-size: 18px; text-align: center; width: 100%; background-color: lightgoldenrodyellow">ANTINIEBLAS</label>
-                                                <div style="justify-content: center; display: flex; margin-top: 15px">
+                                                <div class="fila-campos" style="justify-content: center; display: flex; margin-top: 15px">
                                                     <div class="col-sm-12 col-md-2 col-lg-2" style="align-content: center">
                                                         <div class="input-group mb-3" style="align-content: center">
                                                             <div class="form-floating mb-3">
-                                                                <input type="text" class="form-control" name="anti_derecha"
-                                                                    id="anti_derecha" placeholder="1" value="{{ old('anti_derecha') }}">
+                                                                <input type="text" class="form-control" name="mix_anti_derecha"
+                                                                    id="mix_anti_derecha" placeholder="1" value="{{ old('mix_anti_derecha') }}">
                                                                 <label for="floatingInput">ANTI D</label>
-                                                                @if ($errors->has('anti_derecha'))
+                                                                @if ($errors->has('mix_anti_derecha'))
                                                                 <span
-                                                                    class="error text-danger">{{ $errors->first('anti_derecha') }}</span>
+                                                                    class="error text-danger">{{ $errors->first('mix_anti_derecha') }}</span>
                                                                 @endif
                                                             </div>
 
@@ -238,12 +238,12 @@
                                                         <div class="input-group mb-3" style="align-content: center">
                                                             <div class="form-floating mb-3">
                                                                 <input type="number" class="form-control" step="0.01"
-                                                                    name="anti_izquierda" id="anti_izquierda" placeholder="1"
-                                                                    value="{{ old('anti_izquierda') }}">
+                                                                    name="mix_anti_izquierda" id="mix_anti_izquierda" placeholder="1"
+                                                                    value="{{ old('mix_anti_izquierda') }}">
                                                                 <label for="floatingInput">ANTI I</label>
-                                                                @if ($errors->has('anti_izquierda'))
+                                                                @if ($errors->has('mix_anti_izquierda'))
                                                                 <span
-                                                                    class="error text-danger">{{ $errors->first('anti_izquierda') }}</span>
+                                                                    class="error text-danger">{{ $errors->first('mix_anti_izquierda') }}</span>
                                                                 @endif
                                                             </div>
 
@@ -252,13 +252,13 @@
                                                     <div class="col-sm-12 col-md-2 col-lg-2" style="align-content: center">
                                                         <div class="input-group mb-3" style="align-content: center">
                                                             <div class="form-floating mb-3">
-                                                                <input type="text" class="form-control" name="anti_derecha_1"
-                                                                    id="anti_derecha_1" placeholder="1"
-                                                                    value="{{ old('anti_derecha_1') }}">
+                                                                <input type="text" class="form-control" name="mix_anti_derecha_1"
+                                                                    id="mix_anti_derecha_1" placeholder="1"
+                                                                    value="{{ old('mix_anti_derecha_1') }}">
                                                                 <label for="floatingInput">ANTI D-1</label>
-                                                                @if ($errors->has('anti_derecha_1'))
+                                                                @if ($errors->has('mix_anti_derecha_1'))
                                                                 <span
-                                                                    class="error text-danger">{{ $errors->first('anti_derecha_1') }}</span>
+                                                                    class="error text-danger">{{ $errors->first('mix_anti_derecha_1') }}</span>
                                                                 @endif
                                                             </div>
 
@@ -268,12 +268,12 @@
                                                         <div class="input-group mb-3" style="align-content: center">
                                                             <div class="form-floating mb-3">
                                                                 <input type="number" class="form-control" step="0.01"
-                                                                    name="anti_izquierda_1" id="anti_izquierda_1" placeholder="1"
-                                                                    value="{{ old('anti_izquierda_1') }}">
+                                                                    name="mix_anti_izquierda_1" id="mix_anti_izquierda_1" placeholder="1"
+                                                                    value="{{ old('mix_anti_izquierda_1') }}">
                                                                 <label for="floatingInput">ANTI I-1</label>
-                                                                @if ($errors->has('anti_izquierda_1'))
+                                                                @if ($errors->has('mix_anti_izquierda_1'))
                                                                 <span
-                                                                    class="error text-danger">{{ $errors->first('anti_izquierda_1') }}</span>
+                                                                    class="error text-danger">{{ $errors->first('mix_anti_izquierda_1') }}</span>
                                                                 @endif
                                                             </div>
 
@@ -294,17 +294,17 @@
 
 
                                                 </div>
-                                                <div style="justify-content: center; display: flex; margin-top: 15px">
+                                                <div class="fila-campos" style="justify-content: center; display: flex; margin-top: 15px">
                                                     <div class="col-sm-12 col-md-2 col-lg-2" style="align-content: center">
                                                         <div class="input-group mb-3" style="align-content: center">
                                                             <div class="form-floating mb-3">
-                                                                <input type="text" class="form-control" name="anti_derecha_2"
-                                                                    id="anti_derecha_2" placeholder="1"
-                                                                    value="{{ old('anti_derecha_2') }}">
+                                                                <input type="text" class="form-control" name="mix_anti_derecha_2"
+                                                                    id="mix_anti_derecha_2" placeholder="1"
+                                                                    value="{{ old('mix_anti_derecha_2') }}">
                                                                 <label for="floatingInput">ANTI D-2</label>
-                                                                @if ($errors->has('anti_derecha_2'))
+                                                                @if ($errors->has('mix_anti_derecha_2'))
                                                                 <span
-                                                                    class="error text-danger">{{ $errors->first('anti_derecha_2') }}</span>
+                                                                    class="error text-danger">{{ $errors->first('mix_anti_derecha_2') }}</span>
                                                                 @endif
                                                             </div>
 
@@ -314,12 +314,12 @@
                                                         <div class="input-group mb-3" style="align-content: center">
                                                             <div class="form-floating mb-3">
                                                                 <input type="number" class="form-control" step="0.01"
-                                                                    name="anti_izquierda_2" id="anti_izquierda_2" placeholder="1"
-                                                                    value="{{ old('anti_izquierda_2') }}">
+                                                                    name="mix_anti_izquierda_2" id="mix_anti_izquierda_2" placeholder="1"
+                                                                    value="{{ old('mix_anti_izquierda_2') }}">
                                                                 <label for="floatingInput">ANTI I-2</label>
-                                                                @if ($errors->has('anti_izquierda_2'))
+                                                                @if ($errors->has('mix_anti_izquierda_2'))
                                                                 <span
-                                                                    class="error text-danger">{{ $errors->first('anti_izquierda_2') }}</span>
+                                                                    class="error text-danger">{{ $errors->first('mix_anti_izquierda_2') }}</span>
                                                                 @endif
                                                             </div>
 
@@ -328,13 +328,13 @@
                                                     <div class="col-sm-12 col-md-2 col-lg-2" style="align-content: center">
                                                         <div class="input-group mb-3" style="align-content: center">
                                                             <div class="form-floating mb-3">
-                                                                <input type="text" class="form-control" name="anti_derecha_3"
-                                                                    id="anti_derecha_3" placeholder="1"
-                                                                    value="{{ old('anti_derecha_3') }}">
+                                                                <input type="text" class="form-control" name="mix_anti_derecha_3"
+                                                                    id="mix_anti_derecha_3" placeholder="1"
+                                                                    value="{{ old('mix_anti_derecha_3') }}">
                                                                 <label for="floatingInput">ANTI D-3</label>
-                                                                @if ($errors->has('anti_derecha_3'))
+                                                                @if ($errors->has('mix_anti_derecha_3'))
                                                                 <span
-                                                                    class="error text-danger">{{ $errors->first('anti_derecha_3') }}</span>
+                                                                    class="error text-danger">{{ $errors->first('mix_anti_derecha_3') }}</span>
                                                                 @endif
                                                             </div>
 
@@ -344,12 +344,12 @@
                                                         <div class="input-group mb-3" style="align-content: center">
                                                             <div class="form-floating mb-3">
                                                                 <input type="number" class="form-control" step="0.01"
-                                                                    name="anti_izquierda_3" id="anti_izquierda_3" placeholder="1"
-                                                                    value="{{ old('anti_izquierda_3') }}">
+                                                                    name="mix_anti_izquierda_3" id="mix_anti_izquierda_3" placeholder="1"
+                                                                    value="{{ old('mix_anti_izquierda_3') }}">
                                                                 <label for="floatingInput">ANTI I-3</label>
-                                                                @if ($errors->has('anti_izquierda_3'))
+                                                                @if ($errors->has('mix_anti_izquierda_3'))
                                                                 <span
-                                                                    class="error text-danger">{{ $errors->first('anti_izquierda_3') }}</span>
+                                                                    class="error text-danger">{{ $errors->first('mix_anti_izquierda_3') }}</span>
                                                                 @endif
                                                             </div>
 
@@ -367,19 +367,19 @@
                                                 </div>
                                                 <label
                                                     style="color: rgb(0, 4, 255); font-size: 18px; text-align: center; width: 100%; background-color: lightgoldenrodyellow">INCLINACIONES</label>
-                                                <div style="justify-content: center; display: flex; margin-top: 15px">
+                                                <div class="fila-campos" style="justify-content: center; display: flex; margin-top: 15px">
 
                                                     <br>
                                                     <div class="col-sm-12 col-md-2 col-lg-2" style="align-content: center">
                                                         <div class="input-group mb-3" style="align-content: center">
                                                             <div class="form-floating mb-3">
-                                                                <input type="text" class="form-control" name="incli_derecha"
-                                                                    id="incli_derecha" placeholder="1"
-                                                                    value="{{ old('incli_derecha') }}">
+                                                                <input type="text" class="form-control" name="mix_incli_derecha"
+                                                                    id="mix_incli_derecha" placeholder="1"
+                                                                    value="{{ old('mix_incli_derecha') }}">
                                                                 <label for="floatingInput">INCLI D</label>
-                                                                @if ($errors->has('incli_derecha'))
+                                                                @if ($errors->has('mix_incli_derecha'))
                                                                 <span
-                                                                    class="error text-danger">{{ $errors->first('incli_derecha') }}</span>
+                                                                    class="error text-danger">{{ $errors->first('mix_incli_derecha') }}</span>
                                                                 @endif
                                                             </div>
 
@@ -389,12 +389,12 @@
                                                         <div class="input-group mb-3" style="align-content: center">
                                                             <div class="form-floating mb-3">
                                                                 <input type="number" class="form-control" step="0.01"
-                                                                    name="incli_izquierda" id="incli_izquierda" placeholder="1"
-                                                                    value="{{ old('incli_izquierda') }}">
+                                                                    name="mix_incli_izquierda" id="mix_incli_izquierda" placeholder="1"
+                                                                    value="{{ old('mix_incli_izquierda') }}">
                                                                 <label for="floatingInput">INCLI I</label>
-                                                                @if ($errors->has('incli_izquierda'))
+                                                                @if ($errors->has('mix_incli_izquierda'))
                                                                 <span
-                                                                    class="error text-danger">{{ $errors->first('incli_izquierda') }}</span>
+                                                                    class="error text-danger">{{ $errors->first('mix_incli_izquierda') }}</span>
                                                                 @endif
                                                             </div>
 
@@ -403,13 +403,13 @@
                                                     <div class="col-sm-12 col-md-2 col-lg-2" style="align-content: center">
                                                         <div class="input-group mb-3" style="align-content: center">
                                                             <div class="form-floating mb-3">
-                                                                <input type="text" class="form-control" name="incli_derecha_1"
-                                                                    id="incli_derecha_1" placeholder="1"
-                                                                    value="{{ old('incli_derecha_1') }}">
+                                                                <input type="text" class="form-control" name="mix_incli_derecha_1"
+                                                                    id="mix_incli_derecha_1" placeholder="1"
+                                                                    value="{{ old('mix_incli_derecha_1') }}">
                                                                 <label for="floatingInput">INCLI D-1</label>
-                                                                @if ($errors->has('incli_derecha_1'))
+                                                                @if ($errors->has('mix_incli_derecha_1'))
                                                                 <span
-                                                                    class="error text-danger">{{ $errors->first('incli_derecha_1') }}</span>
+                                                                    class="error text-danger">{{ $errors->first('mix_incli_derecha_1') }}</span>
                                                                 @endif
                                                             </div>
 
@@ -419,12 +419,12 @@
                                                         <div class="input-group mb-3" style="align-content: center">
                                                             <div class="form-floating mb-3">
                                                                 <input type="number" class="form-control" step="0.01"
-                                                                    name="incli_izquierda_1" id="incli_izquierda_1" placeholder="1"
-                                                                    value="{{ old('incli_izquierda_1') }}">
+                                                                    name="mix_incli_izquierda_1" id="mix_incli_izquierda_1" placeholder="1"
+                                                                    value="{{ old('mix_incli_izquierda_1') }}">
                                                                 <label for="floatingInput">INCLI I-1</label>
-                                                                @if ($errors->has('incli_izquierda_1'))
+                                                                @if ($errors->has('mix_incli_izquierda_1'))
                                                                 <span
-                                                                    class="error text-danger">{{ $errors->first('incli_izquierda_1') }}</span>
+                                                                    class="error text-danger">{{ $errors->first('mix_incli_izquierda_1') }}</span>
                                                                 @endif
                                                             </div>
 
@@ -526,10 +526,10 @@
         if (sumBajas) {
             optLuxV[0] = 1;
             var totalBajas = 0;
-            var bajad = $("#baja_derecha").val() ? $("#baja_derecha").val() : 0;
-            var baja1d = $("#baja_derecha_1").val() ? $("#baja_derecha_1").val() : 0;
-            var bajai = $("#baja_izquierda").val() ? $("#baja_izquierda").val() : 0;
-            var baja1i = $("#baja_izquierda_1").val() ? $("#baja_izquierda_1").val() : 0;
+            var bajad = $("#mix_baja_derecha").val() ? $("#mix_baja_derecha").val() : 0;
+            var baja1d = $("#mix_baja_derecha_1").val() ? $("#mix_baja_derecha_1").val() : 0;
+            var bajai = $("#mix_baja_izquierda").val() ? $("#mix_baja_izquierda").val() : 0;
+            var baja1i = $("#mix_baja_izquierda_1").val() ? $("#mix_baja_izquierda_1").val() : 0;
             var totalBajas = (parseFloat(bajad) + parseFloat(bajai) + parseFloat(baja1d) + parseFloat(baja1i));
             var total = $("#intensidad_total").val() ? $("#intensidad_total").val() : 0;
             var n = parseFloat(total) + parseFloat(totalBajas);
@@ -560,10 +560,10 @@
             $("#optLUx").val(finalArray);
             console.log($("#optLUx").val())
             var totalALtas = 0;
-            var altad = $("#alta_derecha").val() ? $("#alta_derecha").val() : 0;
-            var alta1d = $("#alta_derecha_1").val() ? $("#alta_derecha_1").val() : 0;
-            var altai = $("#alta_izquierda").val() ? $("#alta_izquierda").val() : 0;
-            var alta1i = $("#alta_izquierda_1").val() ? $("#alta_izquierda_1").val() : 0;
+            var altad = $("#mix_alta_derecha").val() ? $("#mix_alta_derecha").val() : 0;
+            var alta1d = $("#mix_alta_derecha_1").val() ? $("#mix_alta_derecha_1").val() : 0;
+            var altai = $("#mix_alta_izquierda").val() ? $("#mix_alta_izquierda").val() : 0;
+            var alta1i = $("#mix_alta_izquierda_1").val() ? $("#mix_alta_izquierda_1").val() : 0;
             var totalalta = (parseFloat(altad) + parseFloat(altai) + parseFloat(alta1d) + parseFloat(alta1i));
             var total = $("#intensidad_total").val() ? $("#intensidad_total").val() : 0;
             var n = parseFloat(total) + parseFloat(totalalta);
@@ -593,14 +593,14 @@
             //            console.log(optLux)
             //            convertToBinary1(optLux);
             var totalanti = 0;
-            var antid = $("#anti_derecha").val() ? $("#anti_derecha").val() : 0;
-            var anti1d = $("#anti_derecha_1").val() ? $("#anti_derecha_1").val() : 0;
-            var anti2d = $("#anti_derecha_2").val() ? $("#anti_derecha_2").val() : 0;
-            var anti3d = $("#anti_derecha_3").val() ? $("#anti_derecha_3").val() : 0;
-            var antii = $("#anti_izquierda").val() ? $("#anti_izquierda").val() : 0;
-            var anti1i = $("#anti_izquierda_1").val() ? $("#anti_izquierda_1").val() : 0;
-            var anti2i = $("#anti_izquierda_2").val() ? $("#anti_izquierda_2").val() : 0;
-            var anti3i = $("#anti_izquierda_3").val() ? $("#anti_izquierda_3").val() : 0;
+            var antid = $("#mix_anti_derecha").val() ? $("#mix_anti_derecha").val() : 0;
+            var anti1d = $("#mix_anti_derecha_1").val() ? $("#mix_anti_derecha_1").val() : 0;
+            var anti2d = $("#mix_anti_derecha_2").val() ? $("#mix_anti_derecha_2").val() : 0;
+            var anti3d = $("#mix_anti_derecha_3").val() ? $("#mix_anti_derecha_3").val() : 0;
+            var antii = $("#mix_anti_izquierda").val() ? $("#mix_anti_izquierda").val() : 0;
+            var anti1i = $("#mix_anti_izquierda_1").val() ? $("#mix_anti_izquierda_1").val() : 0;
+            var anti2i = $("#mix_anti_izquierda_2").val() ? $("#mix_anti_izquierda_2").val() : 0;
+            var anti3i = $("#mix_anti_izquierda_3").val() ? $("#mix_anti_izquierda_3").val() : 0;
             console.log(antid + " " + anti1d + " " + anti2d + " " + anti3d)
             console.log(antii + " " + anti1i + " " + anti2i + " " + anti3i)
             var totalanti = (parseFloat(antid) + parseFloat(antii) + parseFloat(anti1d) + parseFloat(anti1i) +
@@ -675,37 +675,37 @@
                             res.valor = res.valor.replace(",", ".");
                             // console.log(res.observacion + " " + res.valor)
                             if (res.observacion == 'baja_izquierda') {
-                                $("#baja_izquierda").val(res.valor);
-                                validarRango(res.valor, 'luces', 'baja_izquierda');
+                                $("#mix_baja_izquierda").val(res.valor);
+                                validarRango(res.valor, 'luces', 'mix_baja_izquierda');
                             }
                             if (res.observacion == 'inclinacion_izquierda') {
-                                $("#incli_izquierda").val(res.valor);
-                                validarRango(res.valor, 'luces', 'incli_izquierda');
+                                $("#mix_incli_izquierda").val(res.valor);
+                                validarRango(res.valor, 'luces', 'mix_incli_izquierda');
                             }
                             if (res.observacion == 'alta_izquierda') {
-                                $("#alta_izquierda").val(res.valor);
-                                validarRango(res.valor, 'luces', 'alta_izquierda');
+                                $("#mix_alta_izquierda").val(res.valor);
+                                validarRango(res.valor, 'luces', 'mix_alta_izquierda');
                             }
                             if (res.observacion == 'baja_derecha') {
-                                $("#baja_derecha").val(res.valor);
-                                validarRango(res.valor, 'luces', 'baja_derecha');
+                                $("#mix_baja_derecha").val(res.valor);
+                                validarRango(res.valor, 'luces', 'mix_baja_derecha');
                             }
 
                             if (res.observacion == 'inclinacion_derecha') {
-                                $("#incli_derecha").val(res.valor);
-                                validarRango(res.valor, 'luces', 'incli_derecha');
+                                $("#mix_incli_derecha").val(res.valor);
+                                validarRango(res.valor, 'luces', 'mix_incli_derecha');
                             }
                             if (res.observacion == 'alta_derecha') {
-                                $("#alta_derecha").val(res.valor);
-                                validarRango(res.valor, 'luces', 'alta_derecha');
+                                $("#mix_alta_derecha").val(res.valor);
+                                validarRango(res.valor, 'luces', 'mix_alta_derecha');
                             }
                             if (res.observacion == 'antis_derecha') {
-                                $("#anti_derecha").val(res.valor);
-                                validarRango(res.valor, 'luces', 'anti_derecha');
+                                $("#mix_anti_derecha").val(res.valor);
+                                validarRango(res.valor, 'luces', 'mix_anti_derecha');
                             }
                             if (res.observacion == 'antis_izquierda') {
-                                $("#anti_izquierda").val(res.valor);
-                                validarRango(res.valor, 'luces', 'anti_izquierda');
+                                $("#mix_anti_izquierda").val(res.valor);
+                                validarRango(res.valor, 'luces', 'mix_anti_izquierda');
                             }
 
 
@@ -731,9 +731,9 @@
         }
     })
 
-    $(document).on('keyup', '#baja_izquierda, #baja_derecha, #incli_izquierda, #incli_derecha, #baja_izquierda_1, #baja_derecha_1, #incli_derecha_1, #incli_izquierda_1', function() {
+    $(document).on('keyup', '#mix_baja_izquierda, #mix_baja_derecha, #mix_incli_izquierda, #mix_incli_derecha, #mix_baja_izquierda_1, #mix_baja_derecha_1, #mix_incli_derecha_1, #mix_incli_izquierda_1', function() {
         const valor = $(this).val();
         const idCampo = $(this).attr('id');
         validarRango(valor, 'luces', idCampo);
     });
-</script>''
+</script>

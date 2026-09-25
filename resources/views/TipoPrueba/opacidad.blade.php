@@ -61,7 +61,7 @@
                                                         <label style="color: rgb(0, 4, 255); font-size: 18px; text-align: center; width: 100%; margin-top: 15px; background-color: lightgoldenrodyellow">
                                                             DATOS TH
                                                         </label>
-                                                        <div style="justify-content: center; display: flex; margin-top: 15px">
+                                                        <div class="fila-campos" style="justify-content: center; display: flex; margin-top: 15px">
                                                             <div class="col-sm-12 col-md-6" style="align-content: center">
                                                                 <div class="input-group mb-3" style="align-content: center">
                                                                     <div class="form-floating mb-3">

@@ -62,7 +62,7 @@
                                                 <label
                                                     style="color: rgb(0, 4, 255); font-size: 18px; text-align: center; background-color: lemonchiffon; width: 100%">DATOS
                                                     MOTOS</label>
-                                                <div style="justify-content: center; display: flex; margin-top: 15px">
+                                                <div class="fila-campos" style="justify-content: center; display: flex; margin-top: 15px">
                                                     <div class="col-sm-12 col-md-3 col-lg-3">
                                                         <div class="mb-1">
                                                             <input type="text" class="form-control" id="pesaje1d"
@@ -106,7 +106,7 @@
 
 
                                                 </div>
-                                                <div style="justify-content: center; display: flex; margin-top: 15px">
+                                                <div class="fila-campos" style="justify-content: center; display: flex; margin-top: 15px">
                                                     <div class="col-sm-12 col-md-2 col-lg-2" style="align-content: center">
                                                         <div class="mb-1">
                                                             <input type="number" class="form-control" placeholder="Eficacia total"
@@ -118,7 +118,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div style="justify-content: center; display: flex; margin-top: 15px">
+                                                <div class="fila-campos" style="justify-content: center; display: flex; margin-top: 15px">
                                                     <div class="col-sm-12 col-md-2 col-lg-2" style="align-content: center">
                                                         <button style="width: 100%; height: 55px;" class="btn btn-outline-secondary"
                                                             id="btn-calcular">Calcular

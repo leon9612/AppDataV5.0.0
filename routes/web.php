@@ -40,55 +40,62 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::resource('/', Clogin::class);
-Route::resource('al', Cal::class);
-Route::resource('su', Csuspension::class);
-Route::resource('op', Copacidad::class);
-Route::resource('so', Csonometro::class);
-Route::resource('tax', Ctaximetro::class);
-Route::resource('fr', Cfrenometro::class);
-Route::resource('frm', Cfrenomotos::class);
-Route::resource('ga', Cgases::class);
-Route::resource('gam', Cgasesmotos::class);
-Route::resource('lu', Cluces::class);
-Route::resource('lum', Clucesmotos::class);
-Route::resource('cpr', Cprincipal::class);
-Route::resource('frmotocarro', Cfrenomotocarro::class);
-Route::resource('visual', Cvisual::class);
-Route::resource('update', Cactualizar::class);
-Route::resource('cal', Calibracion::class);
-Route::resource('fot', Cfotos::class);
 
+// ─── Públicas: login y configuración inicial del dispositivo ─────────────
+// El login se valida en el servidor contra appdatacontrol (ver Clogin@login).
+Route::post('/login', [Clogin::class, 'login'])->middleware('throttle:10,1');
+Route::post('/licencia', [Clogin::class, 'validarLicencia'])->middleware('throttle:30,1');
 Route::get('/close', [Clogin::class, 'cerrarSesion']);
-Route::post('/buscarvehiculo', [Cprincipal::class, 'getVehiculo']);
-
-Route::post('/getMaquina', [Cprincipal::class, 'getMaquina']);
-Route::post('/getActualizacion', [Cactualizar::class, 'getActualizacion']);
-Route::post('/getCalibracion', [Calibracion::class, 'getCalibracion']);
-
-Route::post('/consultarImagen', [Cfotos::class, 'consultarImagen']);
-
-Route::post('/getevento', [Cprincipal::class, 'eventosindra']);
 Route::post('/getlineas', [Cprincipal::class, 'getlineas']);
 Route::get('/getmac', [Clogin::class, 'getMac']);
 Route::get('/configapp', [Clogin::class, 'getConfigApp']);
 Route::post('/configapp', [Clogin::class, 'saveConfigApp']);
-// Route::get('index.php/getSession', [Clogin::class, 'getSession']);
-Route::get('/getSession', [Clogin::class, 'getSession']);
-Route::post('/getDefectos', [Cvisual::class, 'getDefectos']);
-Route::post('/updateObservacion', [Cvisual::class, 'updateObservacion']);
-Route::post('/saveObservacionAdicional', [Cvisual::class, 'saveObservacionAdicional']);
-Route::post('/deleteDefectos', [Cvisual::class, 'deleteDefectos']);
-Route::post('/saveDefectos', [Cvisual::class, 'saveDefectos']);
-Route::post('/saveLabrado', [Cvisual::class, 'saveLabrado']);
-//Route::resource('principal', Cprincipal::class);
 
-Route::post('/getPlacas', [EventosTrait::class, 'getPlacas']);
+// ─── Protegidas: sesión iniciada con Clogin@login y licencia válida ('sesion');
+//     'modulo:<id>' exige además que la licencia habilite ese módulo del menú
+Route::middleware('sesion')->group(function () {
+    Route::resource('al', Cal::class)->middleware('modulo:ali');
+    Route::resource('su', Csuspension::class)->middleware('modulo:sus');
+    Route::resource('op', Copacidad::class)->middleware('modulo:opac');
+    Route::resource('so', Csonometro::class)->middleware('modulo:son');
+    Route::resource('tax', Ctaximetro::class)->middleware('modulo:tax');
+    Route::resource('fr', Cfrenometro::class)->middleware('modulo:fre');
+    Route::resource('frm', Cfrenomotos::class)->middleware('modulo:frem');
+    Route::resource('ga', Cgases::class)->middleware('modulo:gase');
+    Route::resource('gam', Cgasesmotos::class)->middleware('modulo:gasem');
+    Route::resource('lu', Cluces::class)->middleware('modulo:lux');
+    Route::resource('lum', Clucesmotos::class)->middleware('modulo:luxm');
+    Route::resource('cpr', Cprincipal::class);
+    Route::resource('frmotocarro', Cfrenomotocarro::class)->middleware('modulo:fremc');
+    Route::resource('visual', Cvisual::class)->middleware('modulo:visual');
+    Route::resource('update', Cactualizar::class)->middleware('modulo:actu');
+    Route::resource('cal', Calibracion::class)->middleware('modulo:cal');
+    Route::resource('fot', Cfotos::class)->middleware('modulo:fot');
 
+    Route::post('/buscarvehiculo', [Cprincipal::class, 'getVehiculo']);
 
-Route::post('/getPlacasByTipo', [Cprincipal::class, 'getPlacasByTipo']);
-Route::get('/getPlacasByTipo/{tipoejecucion}', [Cprincipal::class, 'getPlacasByTipo']);
+    Route::post('/getMaquina', [Cprincipal::class, 'getMaquina']);
+    Route::post('/getActualizacion', [Cactualizar::class, 'getActualizacion'])->middleware('modulo:actu');
+    Route::post('/getCalibracion', [Calibracion::class, 'getCalibracion'])->middleware('modulo:cal');
 
-Route::get('/get-archivo-desencriptado', [Cprincipal::class, 'getArchivoDesencriptado']);
+    Route::post('/consultarImagen', [Cfotos::class, 'consultarImagen'])->middleware('modulo:fot');
+
+    Route::post('/getevento', [Cprincipal::class, 'eventosindra']);
+    Route::post('/getDefectos', [Cvisual::class, 'getDefectos']); // también la usa Calibración
+    Route::post('/updateObservacion', [Cvisual::class, 'updateObservacion'])->middleware('modulo:visual');
+    Route::post('/saveObservacionAdicional', [Cvisual::class, 'saveObservacionAdicional'])->middleware('modulo:visual');
+    Route::post('/deleteDefectos', [Cvisual::class, 'deleteDefectos'])->middleware('modulo:visual');
+    Route::post('/saveDefectos', [Cvisual::class, 'saveDefectos'])->middleware('modulo:visual');
+    Route::post('/saveLabrado', [Cvisual::class, 'saveLabrado'])->middleware('modulo:visual');
+    //Route::resource('principal', Cprincipal::class);
+
+    Route::post('/getPlacas', [EventosTrait::class, 'getPlacas']);
+
+    Route::post('/getPlacasByTipo', [Cprincipal::class, 'getPlacasByTipo']);
+    Route::get('/getPlacasByTipo/{tipoejecucion}', [Cprincipal::class, 'getPlacasByTipo']);
+
+    Route::get('/get-archivo-desencriptado', [Cprincipal::class, 'getArchivoDesencriptado']);
+});
 
 // Route::post('/proxy-analizador', function (Request $request) {
 //     $tipoprueba = $request->post('tipoprueba');

@@ -57,7 +57,7 @@
                                                         DATO LUCES MOTOS
                                                     </label>
 
-                                                    <div style="justify-content: center; display: flex; margin-top: 15px; width: 100%;">
+                                                    <div class="fila-campos" style="justify-content: center; display: flex; margin-top: 15px; width: 100%;">
                                                         <!-- COLUMNA IZQUIERDA: BAJA (INTENSIDAD) -->
                                                         <div class="col-sm-12 col-md-6"
                                                             style="border-right: 1px solid #ddd; padding-right: 25px;">

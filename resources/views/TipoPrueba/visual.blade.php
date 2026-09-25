@@ -213,7 +213,7 @@
                                         <div style="justify-content: left; display: flex; margin-top: 15px">
 
                                             <br>
-                                            <div class="col-sm-12 col-md-6 col-lg-6" style="align-content: left">
+                                            <div class="col-12 col-md-6" style="align-content: left">
                                                 <div class="mb-1">
                                                     <select style="height: 20em" class="form-select select2-defectos"
                                                         name="selectDefectos" id="selectDefectos">
@@ -253,13 +253,14 @@
                                         <div style="justify-content: left; display: flex; margin-top: 15px">
 
                                             <br>
-                                            <div class="col-sm-12 col-md-12 col-lg-12" style="align-content: left">
-                                                <div class="mb-3" style="width: 30%">
+                                            <div class="col-12" style="align-content: left; min-width: 0">
+                                                <div class="mb-3 col-12 col-md-4">
                                                     <input type="text" id="searchDefectos" class="form-control"
                                                         placeholder="Buscar en defectos asignados...">
                                                 </div>
                                                 <br>
 
+                                                <div class="table-responsive">
                                                 <table class="table" id="tableResultsDefectos">
                                                     <thead>
                                                         <tr>
@@ -275,6 +276,7 @@
 
                                                     </tbody>
                                                 </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -332,7 +334,7 @@
         $('.select2-defectos').select2({
             placeholder: "Buscar defecto...",
             allowClear: true,
-            width: 'resolve',
+            width: '100%',
 
         });
 
@@ -639,7 +641,8 @@
         $('#selectDefectos').select2({
             data: defectOptions,
             placeholder: "Buscar defecto...",
-            allowClear: true
+            allowClear: true,
+            width: '100%'
         });
     }
 

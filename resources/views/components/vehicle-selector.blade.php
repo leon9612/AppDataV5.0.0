@@ -214,7 +214,7 @@
             <span class="input-group-text">
                 <i class="bi bi-stopwatch"></i>
             </span>
-            <input type="number" name="tiempoPrueba" id="tiempoPrueba"
+            <input type="number" class="form-control" name="tiempoPrueba" id="tiempoPrueba"
                 placeholder="Segundos" value="1800" min="1" max="10800" onchange="saveTiempoPrueba(this.value)">
             <span class="input-group-text">Segundos</span>
         </div>

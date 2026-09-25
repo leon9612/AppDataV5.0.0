@@ -1,12 +1,12 @@
 @include('layout.heder')
 
 <main id="main">
-    <section id="visor" class="contact py-5 bg-light">
+    <section id="visor" class="contact py-3 py-lg-5 bg-light">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-11">
                     <!-- Encabezado principal -->
-                    <div class="section-title text-center mb-5">
+                    <div class="section-title text-center mb-4 mb-lg-5">
                         <h1 class="fw-bold display-5 text-primary">Módulo Principal</h1>
                         <div class="border-top border-primary w-25 mx-auto my-3"></div>
                         <p class="lead text-muted">Software <strong>DataSim</strong></p>
@@ -190,9 +190,9 @@
                                     <div class="list-group">
                                         <a href="mailto:ingenierodesoftware0507@gmail.com" class="list-group-item list-group-item-action d-flex align-items-center border-0 shadow-sm mb-2 rounded-3">
                                             <i class="bi bi-envelope-fill text-danger me-3 fs-5"></i>
-                                            <span>ingenierodesoftware0507@gmail.com</span>
+                                            <span class="text-break">ingenierodesoftware0507@gmail.com</span>
                                         </a>
-                                        <a href="https://wa.me/573232517006" class="list-group-item list-group-item-action d-flex align-items-center border-0 shadow-sm rounded-3">
+                                        <a href="https://wa.me/573229065874" class="list-group-item list-group-item-action d-flex align-items-center border-0 shadow-sm rounded-3">
                                             <i class="bi bi-whatsapp text-success me-3 fs-5"></i>
                                             <span>+57 322 9065874 (WhatsApp/Telegram)</span>
                                         </a>

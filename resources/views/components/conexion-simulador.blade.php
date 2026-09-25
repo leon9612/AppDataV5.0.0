@@ -23,11 +23,15 @@
 <div class="col-12 mb-3">
     <div class="row g-2">
         <div class="col-12 col-md-5">
-            <div class="p-2 rounded text-center" style="background: #fafafa; border: 1px solid #ddd;">
-                <span class="fw-bold me-2">Estado:</span>
+            <div class="p-2 rounded d-flex flex-wrap align-items-center gap-2" style="background: #fafafa; border: 1px solid #ddd;">
+                <span class="fw-bold">Estado:</span>
                 <span id="estadoConexionSimulador" class="badge bg-danger">
                     <i class="bi bi-plug"></i> Desconectado
                 </span>
+                {{-- Abre el modal de <x-instrucciones-simulador> --}}
+                <button type="button" class="btn-instrucciones-modal" data-bs-toggle="modal" data-bs-target="#instruccionesModal">
+                    <i class="bi bi-question-circle-fill"></i> Instrucciones
+                </button>
             </div>
         </div>
         <div class="col-12 col-md-7">

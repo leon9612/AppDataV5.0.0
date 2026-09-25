@@ -304,6 +304,36 @@
             opacity: 1;
         }
 
+        .btn-login-custom:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Mientras se valida el login (restric.js) */
+        .btn-login-custom.cargando {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.55rem;
+            cursor: wait;
+        }
+
+        .btn-login-spinner {
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: girar-login 0.7s linear infinite;
+        }
+
+        @keyframes girar-login {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
         /* Badge versión */
         .version-info {
             position: fixed;

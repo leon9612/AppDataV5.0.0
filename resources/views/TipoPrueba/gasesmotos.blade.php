@@ -88,7 +88,7 @@
                                                 <label
                                                     style="color: rgb(0, 4, 255); font-size: 18px; text-align: center; width: 100%; margin-top: 15px; background-color: lightgoldenrodyellow">DATOS
                                                     TH</label>
-                                                <div style="justify-content: center; display: flex; margin-top: 15px">
+                                                <div class="fila-campos" style="justify-content: center; display: flex; margin-top: 15px">
 
                                                     <br>
                                                     <div class="col-sm-12 col-md-4 col-lg-4" style="align-content: center">
@@ -132,7 +132,7 @@
                                                 <label
                                                     style="color: rgb(0, 4, 255); font-size: 18px; text-align: center; width: 100%; margin-top: 15px; background-color: lightgoldenrodyellow">DATOS
                                                     RALENTI</label>
-                                                <div style="justify-content: center; display: flex; margin-top: 15px">
+                                                <div class="fila-campos" style="justify-content: center; display: flex; margin-top: 15px">
 
                                                     <br>
                                                     <div class="col-sm-12 col-md-2 col-lg-2" style="align-content: center">

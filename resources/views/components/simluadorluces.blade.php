@@ -1,6 +1,5 @@
 <style>
-    /* Solo variables de acento + estilos exclusivos de Luces (modal de
-       instrucciones). El resto de .panel-pruebas-pro vive en
+    /* Solo variables de acento de Luces. El resto de .panel-pruebas-pro vive en
        public/assets/css/panel-pruebas.css */
     .panel-pruebas-pro {
         --bajas: #4361EE;
@@ -9,191 +8,6 @@
         --altas-bg: #FDEEEA;
         --niebla: #0E9AA7;
         --niebla-bg: #E6F6F7;
-    }
-
-    /* ===== ESTILOS DEL MODAL DE INSTRUCCIONES ===== */
-    .modal-instrucciones .modal-content {
-        border: none;
-        border-radius: 28px;
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
-        overflow: hidden;
-    }
-
-    .modal-instrucciones .modal-header {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-        padding: 1.5rem 2rem;
-        background: #F8FAFE;
-    }
-
-    .modal-instrucciones .modal-header .modal-title {
-        font-weight: 700;
-        font-size: 1.5rem;
-        color: #1F2937;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .modal-instrucciones .modal-header .modal-title i {
-        color: #4361EE;
-        font-size: 1.8rem;
-    }
-
-    .modal-instrucciones .modal-body {
-        padding: 2rem 2rem 1.5rem;
-        background: #ffffff;
-    }
-
-    .modal-instrucciones .modal-footer {
-        border-top: 1px solid #f0f2f5;
-        padding: 1.25rem 2rem;
-        background: #fafcff;
-    }
-
-    .modal-instrucciones .step-card {
-        background: #F7F9FC;
-        border-radius: 18px;
-        padding: 1.2rem 1.5rem;
-        margin-bottom: 1rem;
-        border-left: 5px solid #4361EE;
-        transition: 0.15s;
-        display: flex;
-        align-items: flex-start;
-        gap: 1rem;
-    }
-
-    .modal-instrucciones .step-card:hover {
-        background: #EEF2FA;
-    }
-
-    .modal-instrucciones .step-number {
-        background: #4361EE;
-        color: white;
-        width: 34px;
-        height: 34px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        font-size: 1.1rem;
-        flex-shrink: 0;
-        margin-top: 2px;
-    }
-
-    .modal-instrucciones .step-content {
-        flex: 1;
-    }
-
-    .modal-instrucciones .step-content strong {
-        color: #1F2937;
-        font-size: 1rem;
-        display: block;
-        margin-bottom: 0.2rem;
-    }
-
-    .modal-instrucciones .step-content p {
-        margin: 0;
-        color: #4B5563;
-        font-size: 0.95rem;
-        line-height: 1.5;
-    }
-
-    .modal-instrucciones .badge-connect {
-        background: #16A34A;
-        color: white;
-        font-weight: 600;
-        padding: 0.3rem 0.8rem;
-        border-radius: 30px;
-        font-size: 0.8rem;
-    }
-
-    .modal-instrucciones .badge-disconnect {
-        background: #DC2626;
-        color: white;
-        font-weight: 600;
-        padding: 0.3rem 0.8rem;
-        border-radius: 30px;
-        font-size: 0.8rem;
-    }
-
-    .modal-instrucciones .badge-search {
-        background: #0E9AA7;
-        color: white;
-        font-weight: 600;
-        padding: 0.3rem 0.8rem;
-        border-radius: 30px;
-        font-size: 0.8rem;
-    }
-
-    .modal-instrucciones .warning-box {
-        background: #FFF9E6;
-        border-radius: 18px;
-        padding: 1rem 1.5rem;
-        border: 1px solid #FFE082;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-top: 1.2rem;
-    }
-
-    .modal-instrucciones .warning-box i {
-        color: #E6A800;
-        font-size: 2rem;
-    }
-
-    .modal-instrucciones .warning-box small {
-        color: #7A5D00;
-        font-weight: 500;
-    }
-
-    .modal-instrucciones .icon-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.3rem;
-        background: white;
-        padding: 0.2rem 0.8rem;
-        border-radius: 40px;
-        border: 1px solid #E5E7EB;
-        font-size: 0.8rem;
-        font-weight: 500;
-    }
-
-    .modal-backdrop {
-        backdrop-filter: blur(4px);
-    }
-
-    @media (max-width: 480px) {
-        .modal-instrucciones .step-card {
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .modal-instrucciones .modal-body {
-            padding: 1.25rem;
-        }
-    }
-
-    .btn-instrucciones-modal {
-        background: #4361EE;
-        color: white;
-        border: none;
-        padding: 0.35rem 1.2rem;
-        border-radius: 60px;
-        font-weight: 600;
-        font-size: 0.85rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        transition: 0.2s;
-        cursor: pointer;
-        margin-left: auto;
-    }
-
-    .btn-instrucciones-modal:hover {
-        background: #3651d4;
-        transform: scale(1.02);
-        color: white;
     }
 </style>
 
@@ -221,10 +35,10 @@
 
                             <div class="col-12 mb-4">
                                 <div class="card panel-pruebas-pro border-0 shadow-sm rounded-4 overflow-hidden">
-                                    <div class="card-header py-3 px-4 d-flex align-items-center gap-2">
+                                    <div class="card-header py-3 px-4 d-flex flex-wrap align-items-center gap-2">
                                         <i class="bi bi-database text-dark"></i>
                                         <h5 class="mb-0 fw-bold" style="font-size:1rem;">Datos de la prueba</h5>
-                                        <div class="ms-auto d-flex align-items-center gap-2">
+                                        <div class="ms-auto d-flex flex-wrap align-items-center gap-2">
                                             <!-- Modo de trama del luxómetro (debe coincidir con la configuración de la app) -->
                                             <label for="modoLuxometro" class="mb-0 small fw-semibold text-nowrap">Modo</label>
                                             <select id="modoLuxometro" class="form-select form-select-sm" style="width:auto;">
@@ -236,10 +50,12 @@
                                                 <option value="capelec2">Capelec 2 (ticket)</option>
                                                 <option value="capelec">Capelec (archivo RES)</option>
                                             </select>
-                                            <!-- Botón para abrir el modal de instrucciones -->
-                                            <button class="btn-instrucciones-modal" data-bs-toggle="modal" data-bs-target="#instruccionesModal">
-                                                <i class="bi bi-question-circle-fill"></i> Instrucciones
-                                            </button>
+                                            <!-- Inclinación de las bajas: aleatoria o ingresada por toma -->
+                                            <label for="modoInclinacion" class="mb-0 small fw-semibold text-nowrap">Inclinación</label>
+                                            <select id="modoInclinacion" class="form-select form-select-sm" style="width:auto;">
+                                                <option value="aleatoria">Aleatoria</option>
+                                                <option value="manual">Manual</option>
+                                            </select>
                                         </div>
                                     </div>
 
@@ -257,6 +73,8 @@
                                                         <label>Toma 1</label>
                                                         <input type="text" class="form-control form-control-sm" name="baja_derecha"
                                                             id="baja_derecha" placeholder="1" value="{{ old('baja_derecha') }}">
+                                                        <input type="number" step="0.01" class="form-control form-control-sm input-inclinacion" id="baja_derecha_inc"
+                                                            placeholder="Inc %" title="Inclinación (%)" style="display:none;">
                                                         @if ($errors->has('baja_derecha'))
                                                         <span class="error text-danger campo-error">{{ $errors->first('baja_derecha') }}</span>
                                                         @endif
@@ -265,6 +83,8 @@
                                                         <label>Toma 2</label>
                                                         <input type="text" class="form-control form-control-sm" name="baja_derecha_1"
                                                             id="baja_derecha_1" placeholder="1" value="{{ old('baja_derecha_1') }}">
+                                                        <input type="number" step="0.01" class="form-control form-control-sm input-inclinacion" id="baja_derecha_1_inc"
+                                                            placeholder="Inc %" title="Inclinación (%)" style="display:none;">
                                                         @if ($errors->has('baja_derecha_1'))
                                                         <span class="error text-danger campo-error">{{ $errors->first('baja_derecha_1') }}</span>
                                                         @endif
@@ -273,6 +93,8 @@
                                                         <label>Toma 3</label>
                                                         <input type="text" class="form-control form-control-sm" name="baja_derecha_2"
                                                             id="baja_derecha_2" placeholder="1" value="{{ old('baja_derecha_2') }}">
+                                                        <input type="number" step="0.01" class="form-control form-control-sm input-inclinacion" id="baja_derecha_2_inc"
+                                                            placeholder="Inc %" title="Inclinación (%)" style="display:none;">
                                                         @if ($errors->has('baja_derecha_2'))
                                                         <span class="error text-danger campo-error">{{ $errors->first('baja_derecha_2') }}</span>
                                                         @endif
@@ -287,6 +109,8 @@
                                                         <label>Toma 1</label>
                                                         <input type="number" step="0.01" class="form-control form-control-sm" name="baja_izquierda"
                                                             id="baja_izquierda" placeholder="1" value="{{ old('baja_izquierda') }}">
+                                                        <input type="number" step="0.01" class="form-control form-control-sm input-inclinacion" id="baja_izquierda_inc"
+                                                            placeholder="Inc %" title="Inclinación (%)" style="display:none;">
                                                         @if ($errors->has('baja_izquierda'))
                                                         <span class="error text-danger campo-error">{{ $errors->first('baja_izquierda') }}</span>
                                                         @endif
@@ -295,6 +119,8 @@
                                                         <label>Toma 2</label>
                                                         <input type="number" step="0.01" class="form-control form-control-sm" name="baja_izquierda_1"
                                                             id="baja_izquierda_1" placeholder="1" value="{{ old('baja_izquierda_1') }}">
+                                                        <input type="number" step="0.01" class="form-control form-control-sm input-inclinacion" id="baja_izquierda_1_inc"
+                                                            placeholder="Inc %" title="Inclinación (%)" style="display:none;">
                                                         @if ($errors->has('baja_izquierda_1'))
                                                         <span class="error text-danger campo-error">{{ $errors->first('baja_izquierda_1') }}</span>
                                                         @endif
@@ -303,6 +129,8 @@
                                                         <label>Toma 3</label>
                                                         <input type="number" step="0.01" class="form-control form-control-sm" name="baja_izquierda_2"
                                                             id="baja_izquierda_2" placeholder="1" value="{{ old('baja_izquierda_2') }}">
+                                                        <input type="number" step="0.01" class="form-control form-control-sm input-inclinacion" id="baja_izquierda_2_inc"
+                                                            placeholder="Inc %" title="Inclinación (%)" style="display:none;">
                                                         @if ($errors->has('baja_izquierda_2'))
                                                         <span class="error text-danger campo-error">{{ $errors->first('baja_izquierda_2') }}</span>
                                                         @endif
@@ -457,7 +285,7 @@
                                         </div>
                                     </div>
 
-                                    @endif;
+                                    @endif
 
                                     <!-- ════════════ ACCIÓN: DATO TOMADO (solo Capelec / Capelec 2) ════════════ -->
                                     <div class="accion-dato-tomado" id="accionDatoTomadoLuces" style="display:none;">
@@ -480,86 +308,7 @@
     </div>
 </div>
 
-<!-- ========== MODAL DE INSTRUCCIONES ========== -->
-<div class="modal fade modal-instrucciones" id="instruccionesModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <i class="bi bi-clipboard2-check"></i>
-                    ¿Cómo realizar la prueba de luces?
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Paso 1 -->
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <strong><i class="bi bi-bluetooth me-1"></i> Conectar antes de iniciar</strong>
-                        <p>
-                            Presiona el botón <span class="badge-connect"><i class="bi bi-plug"></i> Conectar</span>
-                            en el software <strong>antes</strong> de empezar la prueba en el celular.
-                            <br><span class="text-danger"><i class="bi bi-exclamation-triangle-fill"></i> Si no lo haces, la comunicación fallará.</span>
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Paso 2 -->
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <strong><i class="bi bi-search me-1"></i> Buscar placa o llenar datos</strong>
-                        <p>
-                            Usa <span class="badge-search"><i class="bi bi-search"></i> Buscar Datos</span> para traer valores de una prueba anterior,
-                            o completa manualmente las casillas con los valores que deseas enviar.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Paso 3 -->
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <strong><i class="bi bi-power me-1"></i> Desconectar al finalizar</strong>
-                        <p>
-                            <strong>Siempre</strong> presiona <span class="badge-disconnect"><i class="bi bi-bluetooth-off"></i> Desconectar</span>
-                            cuando termines la prueba.
-                            <br><span class="text-danger"><i class="bi bi-exclamation-triangle-fill"></i> Si no lo haces, el puerto queda ocupado y no podrás usar el equipo real.</span>
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Mensaje de advertencia / consejo extra -->
-                <div class="warning-box">
-                    <i class="bi bi-lightbulb-fill"></i>
-                    <div>
-                        <small>
-                            <strong>Consejo importante:</strong> Verifica que el estado cambie a
-                            <span class="badge bg-success" style="font-weight:600;">Conectado</span>
-                            antes de enviar cualquier valor. Si ves algún error, reconecta.
-                        </small>
-                    </div>
-                </div>
-
-                <!-- Mini recordatorio visual -->
-                <div class="d-flex flex-wrap gap-2 mt-3 justify-content-center">
-                    <span class="icon-chip"><i class="bi bi-check-circle-fill text-success"></i> Conectar primero</span>
-                    <span class="icon-chip"><i class="bi bi-pencil-square text-info"></i> Llenar datos</span>
-                    <span class="icon-chip"><i class="bi bi-x-circle-fill text-danger"></i> Desconectar al final</span>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">
-                    <i class="bi bi-x-lg me-1"></i> Cerrar
-                </button>
-                <button type="button" class="btn btn-primary rounded-pill px-4" data-bs-dismiss="modal">
-                    <i class="bi bi-check-lg me-1"></i> Entendido
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+<x-instrucciones-simulador prueba="luces" />
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"
     integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
@@ -677,7 +426,7 @@
     }
 
     // ─── Enviar un solo haz de luz al tablero ──────────────────────────────
-    function enviarDatoluces(grupo, valor) {
+    function enviarDatoluces(grupo, valor, inclinacion) {
         // const datoluces = localStorage.getItem('livianos_luces');
         // // const data = JSON.parse(datoluces);
 
@@ -711,7 +460,7 @@
             modo: document.getElementById('modoLuxometro').value,
             tipoLuz: tipo === 'anti' ? 'antiniebla' : tipo,
             ladoLuz: lado,
-            inclinacion: Number((Math.random() * (2.0 - 1.3) + 1.3).toFixed(2)),
+            inclinacion: inclinacion,
             valorLuz: valorNumerico,
             "sup": false
         });
@@ -809,6 +558,46 @@
         mostrarDatoTomadoLuces();
     });
 
+    // ─── Inclinación de las bajas: aleatoria o manual (recordada en localStorage) ─
+    // Solo las luces bajas llevan inclinación en las tramas del luxómetro.
+    const INCLINACION_MIN = 1.3;
+    const INCLINACION_MAX = 2.0;
+    const CLAVE_MODO_INCLINACION = 'modo_inclinacion_luces';
+
+    const esInclinacionManual = () => document.getElementById('modoInclinacion').value === 'manual';
+
+    function cargarModoInclinacion() {
+        const guardado = localStorage.getItem(CLAVE_MODO_INCLINACION);
+        document.getElementById('modoInclinacion').value = guardado === 'manual' ? 'manual' : 'aleatoria';
+        mostrarInputsInclinacion();
+    }
+
+    function mostrarInputsInclinacion() {
+        const visible = esInclinacionManual();
+        document.querySelectorAll('.input-inclinacion').forEach(input => {
+            input.style.display = visible ? '' : 'none';
+        });
+    }
+
+    // Devuelve la inclinación a enviar para la toma, null si es manual y no es válida,
+    // o undefined si la luz no es baja.
+    function obtenerInclinacion(grupo, inputValor) {
+        if (!grupo.startsWith('baja_')) return undefined;
+
+        if (!esInclinacionManual()) {
+            return Number((Math.random() * (INCLINACION_MAX - INCLINACION_MIN) + INCLINACION_MIN).toFixed(2));
+        }
+
+        const inputInclinacion = document.getElementById(`${inputValor.id}_inc`);
+        const inclinacion = Number.parseFloat(String(inputInclinacion?.value ?? '').replace(',', '.'));
+        return Number.isFinite(inclinacion) ? inclinacion : null;
+    }
+
+    $('#modoInclinacion').on('change', function() {
+        localStorage.setItem(CLAVE_MODO_INCLINACION, this.value);
+        mostrarInputsInclinacion();
+    });
+
     // ─── "Dato tomado": entrega juntas todas las luces enviadas ────────────
     $('#btnDatoTomadoGeneralLuces').on('click', function() {
         enviarDatosAlTableroLuces('dato-tomado', {
@@ -827,6 +616,7 @@
 
     $(document).ready(function() {
         cargarModoLuxometro();
+        cargarModoInclinacion();
 
         // Cada toma tiene su propio botón: nunca se envía el par completo.
         document.querySelectorAll('.eje-chip').forEach(chip => {
@@ -868,7 +658,17 @@
                     return;
                 }
 
-                enviarDatoluces(grupo, input.value);
+                const inclinacion = obtenerInclinacion(grupo, input);
+                if (inclinacion === null) {
+                    Toast.fire({
+                        icon: 'warning',
+                        title: '⚠️ Inclinación requerida',
+                        text: 'Ingrese la inclinación de esta toma o cambie a inclinación aleatoria'
+                    });
+                    return;
+                }
+
+                enviarDatoluces(grupo, input.value, inclinacion);
                 marcarEnviado(this);
             });
         });
