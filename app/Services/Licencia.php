@@ -3,14 +3,16 @@
 namespace App\Services;
 
 use Carbon\Carbon;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 // Valida la licencia del dispositivo contra appdatacontrol desde el servidor.
 // Solo se permite el uso con una respuesta válida y vigente: una respuesta vacía, inválida
-// o un error de red bloquean, salvo la gracia sin conexión (GRACIA_HORAS) contada desde la
-// última validación exitosa, que se guarda cifrada con la APP_KEY (no en el navegador).
+// o un error de red bloquean siempre (no hay gracia sin conexión). La última validación se
+// guarda cifrada con la APP_KEY (no en el navegador) solo para no consultar en cada petición.
 class Licencia
 {
     const URL_DISPOSITIVO = 'https://appdataingeniersoftware.com/appdatacontrol/index.php/Cdispositivo';
@@ -23,9 +25,9 @@ class Licencia
         'ali', 'fre', 'frem', 'fremc', 'gase', 'gasem',
         'lux', 'luxm', 'opac', 'son', 'sus', 'tax',
         'visual', 'actu', 'cal', 'fot',
+        'simcapmot', 'simcapliv',
     ];
 
-    const GRACIA_HORAS = 24;
     const REVALIDAR_MINUTOS = 5;
     const REINTENTO_SIN_CONEXION_MINUTOS = 2;
     const ZONA = 'America/Bogota';
@@ -48,24 +50,33 @@ class Licencia
             }
         }
 
-        // Tras un fallo de conexión no se reintenta enseguida: sin internet cada página
-        // esperaría los timeouts de appdatacontrol (también al forzar)
+        // Tras un fallo de conexión no se reintenta enseguida: sin internet cada petición
+        // esperaría los timeouts de appdatacontrol. Al forzar (carga de página y login) sí se
+        // reintenta, para que al volver la conexión se desbloquee recargando.
         $claveFallo = 'licencia_sin_conexion_' . sha1(mb_strtolower($dominio) . '|' . mb_strtolower($mac));
-        if (Cache::has($claveFallo)) {
-            return self::sinConexion($guardado, $ahora);
+        if (!$forzar && Cache::has($claveFallo)) {
+            return self::sinConexion();
         }
 
         try {
-            $dispositivo = self::http()->asForm()->post(self::URL_DISPOSITIVO, ['mac' => $mac, 'dominio' => $dominio]);
-            $appdata = self::http()->withHeaders(['autorization' => self::TOKEN_APPDATA])
-                ->get(self::URL_APPDATA, ['dominio' => $dominio]);
+            $dispositivo = self::enviar(self::URL_DISPOSITIVO, function ($http, $url) use ($mac, $dominio) {
+                return $http->asForm()->post($url, ['mac' => $mac, 'dominio' => $dominio]);
+            });
+            $appdata = self::enviar(self::URL_APPDATA, function ($http, $url) use ($dominio) {
+                return $http->withHeaders(['autorization' => self::TOKEN_APPDATA])->get($url, ['dominio' => $dominio]);
+            });
         } catch (\Throwable $e) {
+            Log::warning('Licencia: error al consultar appdatacontrol: ' . $e->getMessage());
             $dispositivo = $appdata = null;
+        }
+
+        if ($dispositivo && $appdata && (!$dispositivo->successful() || !$appdata->successful())) {
+            Log::warning('Licencia: appdatacontrol respondió dispositivo=' . $dispositivo->status() . ' appdata=' . $appdata->status());
         }
 
         if (!$dispositivo || !$appdata || !$dispositivo->successful() || !$appdata->successful()) {
             Cache::put($claveFallo, true, now()->addMinutes(self::REINTENTO_SIN_CONEXION_MINUTOS));
-            return self::sinConexion($guardado, $ahora);
+            return self::sinConexion();
         }
         Cache::forget($claveFallo);
 
@@ -120,37 +131,16 @@ class Licencia
             'mensaje' => '',
             'fechavigencia' => $vigencia->toDateString(),
             'modulos' => $modulos,
+            // 0 = sin simuladores y acordeón de prueba abierto; sin la columna se asume 1 (comportamiento actual)
+            'aplicaresolucion' => (string) ($licencia['aplicaresolucion'] ?? '1') === '0' ? '0' : '1',
             'sinConexion' => false,
         ];
     }
 
-    // Sin respuesta de appdatacontrol: solo se permite si la última validación fue exitosa,
-    // hace menos de GRACIA_HORAS, la licencia sigue vigente y el reloj no se atrasó.
-    private static function sinConexion(?array $guardado, Carbon $ahora): array
+    // Sin respuesta de appdatacontrol siempre se bloquea, aunque la última validación haya sido exitosa
+    private static function sinConexion(): array
     {
-        $bloqueo = self::bloqueo('sin_conexion', 'No se pudo validar la licencia con el servidor. Verifique la conexión a internet e intente nuevamente.');
-
-        if (!$guardado || empty($guardado['resultado']['permitido'])) {
-            return $bloqueo;
-        }
-
-        $validadoEn = Carbon::createFromTimestamp($guardado['validadoEn'], self::ZONA);
-        $vigencia = self::fecha($guardado['resultado']['fechavigencia'] ?? null);
-
-        $relojAtrasado = $ahora->lt($validadoEn->copy()->subMinutes(5));
-        $graciaVencida = $ahora->gt($validadoEn->copy()->addHours(self::GRACIA_HORAS));
-        $licenciaVencida = !$vigencia || $ahora->copy()->startOfDay()->gte($vigencia);
-
-        if ($relojAtrasado || $graciaVencida || $licenciaVencida) {
-            return $bloqueo;
-        }
-
-        $resultado = $guardado['resultado'];
-        $resultado['sinConexion'] = true;
-        $resultado['mensaje'] = 'Sin conexión con el servidor de licencias. Puede seguir trabajando hasta el '
-            . $validadoEn->copy()->addHours(self::GRACIA_HORAS)->format('Y-m-d H:i') . '.';
-
-        return self::conDiasRestantes($resultado, $ahora);
+        return self::bloqueo('sin_conexion', 'No se pudo validar la licencia con el servidor. Verifique la conexión a internet e intente nuevamente.');
     }
 
     private static function bloqueo(string $motivo, string $mensaje, ?string $fechavigencia = null): array
@@ -161,6 +151,7 @@ class Licencia
             'mensaje' => $mensaje,
             'fechavigencia' => $fechavigencia,
             'modulos' => array_fill_keys(self::MODULOS, '0'),
+            'aplicaresolucion' => '1',
             'sinConexion' => false,
             'diasRestantes' => null,
         ];
@@ -187,10 +178,100 @@ class Licencia
         }
     }
 
-    private static function http()
+    public static function http()
     {
-        // El PHP de los equipos no trae certificados raíz: se usa el paquete incluido en el proyecto
-        return Http::withOptions(['verify' => resource_path('certs/cacert.pem')])->connectTimeout(5)->timeout(10);
+        // El PHP de los equipos no trae certificados raíz: se usa el paquete incluido en el proyecto.
+        // Si aún no llegó con la actualización, se intenta con los certificados del sistema.
+        $certificados = resource_path('certs/cacert.pem');
+        // appdatacontrol publica IPv6 que no acepta conexiones: se fuerza IPv4 para no caer en "Connection refused".
+        return Http::withOptions([
+            'verify' => is_file($certificados) ? $certificados : true,
+            'force_ip_resolve' => 'v4', // sirve con curl y con streams (el PHP de Apache no trae curl)
+        ])->connectTimeout(5)->timeout(10);
+    }
+
+    // El dominio está en la CDN de Hostinger, que responde con IPs distintas en cada consulta DNS y
+    // desde algunas redes el 443 de varias de ellas no conecta. Guzzle solo usa la primera IP, así
+    // que aquí se prueba cada una (empezando por la última que funcionó) hasta que una conecte.
+    // $enviar recibe (PendingRequest, url) y devuelve la respuesta.
+    public static function enviar(string $url, callable $enviar)
+    {
+        $host = parse_url($url, PHP_URL_HOST);
+        $claveIp = 'licencia_ip_' . $host;
+        $ips = array_values(array_unique(array_filter(array_merge([Cache::get($claveIp)], self::ipsDe($host)))));
+
+        if (!$ips) {
+            return $enviar(self::http(), $url); // sin DNS propio: que Guzzle resuelva como antes
+        }
+
+        $error = null;
+        $puerto = parse_url($url, PHP_URL_SCHEME) === 'http' ? 80 : 443;
+        foreach ($ips as $i => $ip) {
+            // Con streams (el PHP de Apache no trae curl) Guzzle ignora connectTimeout y una IP muerta
+            // tardaría el timeout completo: se comprueba antes que el puerto conecte
+            if ($i < count($ips) - 1 && !self::conecta($host, $ip, $puerto)) {
+                Log::warning("Licencia: $host no conecta por $ip:$puerto, se prueba otra IP");
+                continue;
+            }
+            try {
+                $respuesta = $enviar(self::httpPorIp($host, $ip, $i > 0), self::conIp($url, $host, $ip));
+                Cache::forever($claveIp, $ip);
+                return $respuesta;
+            } catch (ConnectionException $e) {
+                Log::warning("Licencia: sin conexión con $host por $ip: " . $e->getMessage());
+                $error = $e;
+            }
+        }
+        Cache::forget($claveIp);
+        throw $error;
+    }
+
+    // Se negocia TLS y no solo TCP: en las IPs que fallan el TCP conecta pero el handshake se queda colgado.
+    // Solo mide si la IP responde; el certificado lo valida después la petición real.
+    private static function conecta(string $host, string $ip, int $puerto): bool
+    {
+        $contexto = stream_context_create(['ssl' => ['peer_name' => $host, 'verify_peer' => false, 'verify_peer_name' => false]]);
+        $destino = ($puerto === 443 ? 'ssl' : 'tcp') . "://$ip:$puerto";
+        $socket = @stream_socket_client($destino, $codigo, $mensaje, 3, STREAM_CLIENT_CONNECT, $contexto);
+        if (!$socket) {
+            return false;
+        }
+        fclose($socket);
+        return true;
+    }
+
+    private static function ipsDe(string $host): array
+    {
+        $registros = @dns_get_record($host, DNS_A);
+        $ips = is_array($registros) ? array_column($registros, 'ip') : [];
+        if (!$ips) {
+            $ips = @gethostbynamel($host) ?: [];
+        }
+        return array_values(array_filter($ips, function ($ip) {
+            return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+        }));
+    }
+
+    private static function httpPorIp(string $host, string $ip, bool $reintento)
+    {
+        $http = self::http()->withOptions(['force_ip_resolve' => null]);
+        if ($reintento) {
+            $http->connectTimeout(3); // que probar todas las IPs no deje la página esperando demasiado
+        }
+
+        if (extension_loaded('curl')) {
+            // curl: la URL conserva el dominio y se le indica a qué IP conectar
+            return $http->withOptions(['curl' => [CURLOPT_RESOLVE => ["$host:443:$ip", "$host:80:$ip"]]]);
+        }
+
+        // streams: la URL lleva la IP, el certificado se valida contra el dominio y el Host lo identifica
+        return $http->withHeaders(['Host' => $host])
+            ->withOptions(['stream_context' => ['ssl' => ['peer_name' => $host, 'SNI_server_name' => $host]]]);
+    }
+
+    private static function conIp(string $url, string $host, string $ip): string
+    {
+        return extension_loaded('curl') ? $url : preg_replace('#^(https?://)' . preg_quote($host, '#') . '#i', '${1}' . $ip, $url);
     }
 
     private static function ruta(string $dominio, string $mac): string
@@ -237,8 +318,10 @@ class Licencia
         }
 
         if ($macAddr === '') {
-            $macAddr = (string) exec('getmac | findstr "Device"');
-            $macAddr = (string) strtok($macAddr, ' ');
+            // getmac tarda ~2.5 s y la MAC del servidor no cambia: se guarda un día
+            $macAddr = Cache::remember('licencia_mac_servidor', now()->addDay(), function () {
+                return (string) strtok((string) exec('getmac | findstr "Device"'), ' ');
+            });
         }
 
         return mb_convert_encoding($macAddr, 'UTF-8', 'ISO-8859-1');
