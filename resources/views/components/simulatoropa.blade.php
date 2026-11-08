@@ -122,11 +122,14 @@
                                                         <i class="bi bi-send"></i> Realizar cero
                                                     </button>
                                                 </div>
-                                                <div class="col-12 col-md-4">
-                                                    <button id="btnEnviarCruceroOpacimetro"
-                                                        class="btn btn-warning btn-sm w-100 btn-enviar" disabled>
-                                                        <i class="bi bi-send"></i> Enviar Datos Opacidad
-                                                    </button>
+                                                <div class="col-12 col-md-4 d-flex align-items-center justify-content-center">
+                                                    <div class="form-check form-switch mb-0">
+                                                        <input class="form-check-input" type="checkbox" role="switch"
+                                                            id="chkEnPruebaOpacimetro" disabled>
+                                                        <label class="form-check-label fw-semibold" for="chkEnPruebaOpacimetro">
+                                                            En toma de ciclos
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -151,7 +154,7 @@
 <script>
     // ─── ToastOpacimetro ────────────────────────────────────────────────────────────────────
     const ToastOpacimetroOpacimetro = Swal.mixin({
-        ToastOpacimetro: true,
+        toast: true,
         position: "top-end",
         showConfirmButton: false,
         timer: 3000,
@@ -244,7 +247,8 @@
     function setBotonesConectado(conectado) {
         $('#btnConectarSimuladorOpacimetro').prop('disabled', conectado);
         $('#btnDesconectarSimuladorOpacimetro').prop('disabled', !conectado);
-        $('#btnEnviarCruceroOpacimetro').prop('disabled', !conectado);
+        $('#chkEnPruebaOpacimetro').prop('disabled', !conectado);
+        if (!conectado) $('#chkEnPruebaOpacimetro').prop('checked', false);
         $('#btnEscalizacion').prop('disabled', !conectado);
         $('#btnCero').prop('disabled', !conectado);
     }
@@ -346,48 +350,6 @@
         }
     }
 
-    // ─── Enviar datos al tablero ──────────────────────────────────────────────────
-    async function enviarDatosAlTableroOpacimetro(datos) {
-        if (!simuladorConectadoOpacimetro) {
-            ToastOpacimetroOpacimetro.fire({
-                icon: "warning",
-                title: "⚠️ No conectado",
-                text: "Primero conecte al tablero"
-            });
-            return null;
-        }
-
-        return enviarDatosAlTableroGenerico('opacimetro', 'escribir-datos', datos, {
-            toast: ToastOpacimetroOpacimetro,
-            onExito: () => { pruebainiciadaOpacimetro = true; },
-            onDesconectado: () => setDesconectado()
-        });
-    }
-
-    // ─── Enviar opacidad (wrapper con validación) ─────────────────────────────────
-    function enviarValoresCruceroOpacimetro() {
-        const temperatura = parseFloat($('#temp_captadorOpacimetro').val());
-        const opa1k = parseFloat($('#sim_opacidad1_ralentiOpacimetro').val());
-        const rpm = getRpmSeleccionado();
-
-        if (isNaN(temperatura) || isNaN(opa1k) || isNaN(rpm)) {
-            ToastOpacimetroOpacimetro.fire({
-                icon: "warning",
-                title: "⚠️ Campos incompletos",
-                text: "Complete todos los campos y calcule los valores primero"
-            });
-            return;
-        }
-
-        enviarDatosAlTableroOpacimetro({
-            estado: estadoPruebaOpacimetro,
-            valopa: opa1k,
-            rpm_ralenti: rpm,
-            temperatura,
-            _token: $('#csrf_token').val()
-        });
-    }
-
     // ─── Desconectar ──────────────────────────────────────────────────────────────
     function desconectarSimuladorOpacimetro() {
         ToastOpacimetroOpacimetro.fire({
@@ -401,6 +363,7 @@
 
         fetch(`${URL_BASE}opacimetro/detener-escritura`, {
                 method: 'POST',
+                keepalive: true,
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -442,8 +405,7 @@
 
             ToastOpacimetroOpacimetro.fire({
                 icon: "success",
-                title: "✅ Escalización completada",
-                text: "Ya puede enviar datos de opacidad"
+                title: "Escalización realizada"
             });
 
         } catch (error) {
@@ -477,8 +439,7 @@
 
             ToastOpacimetroOpacimetro.fire({
                 icon: "success",
-                title: "✅ Cero completado",
-                text: "Ya puede enviar datos de opacidad"
+                title: "Cero realizado"
             });
 
         } catch (error) {
@@ -494,7 +455,11 @@
     // ─── Event Listeners ──────────────────────────────────────────────────────────
     $('#btnConectarSimuladorOpacimetro').on('click', iniciarCaptadorOpacimetro);
     $('#btnDesconectarSimuladorOpacimetro').on('click', desconectarSimuladorOpacimetro);
-    $('#btnEnviarCruceroOpacimetro').on('click', enviarValoresCruceroOpacimetro);
+    // Check "En prueba": solo marca la prueba como iniciada, no envía nada al tablero.
+    // Mientras esté activo, cada cambio Ralentí/Crucero manda la opacidad correspondiente.
+    $('#chkEnPruebaOpacimetro').on('change', function() {
+        pruebainiciadaOpacimetro = $(this).is(':checked');
+    });
     $('#btnEscalizacion').on('click', realizarEscalizacionOpacimetro);
     $('#btnCero').on('click', realizarCero);
 

@@ -772,7 +772,10 @@
          Los id de cada enlace los usa restric.js para ocultar/mostrar sin recargar. --}}
     @php
         $modulosLicencia = session('licencia.modulos', []);
-        $habilitado = fn($id) => ($modulosLicencia[$id] ?? '0') === '1';
+        // 'simcap' (Captador RPM/Temp) se muestra si la licencia habilita motos O livianos
+        $habilitado = fn($id) => $id === 'simcap'
+            ? (($modulosLicencia['simcapmot'] ?? '0') === '1' || ($modulosLicencia['simcapliv'] ?? '0') === '1')
+            : ($modulosLicencia[$id] ?? '0') === '1';
         $esActual = fn($ruta) => request()->is($ruta) || request()->is($ruta . '/*');
 
         // [ruta, id de módulo, texto]
@@ -800,6 +803,7 @@
             ['visual', 'visual', 'bi-eye', 'Visual'],
             ['so', 'son', 'bi-mic-fill', 'Sonómetro'],
             ['tax', 'tax', 'bi-speedometer2', 'Taxímetro'],
+            ['cap', 'simcap', 'bi-thermometer-half', 'Captador RPM/Temp'],
         ];
         $herramientas = [
             ['fot', 'fot', 'bi-camera', 'Fotos'],

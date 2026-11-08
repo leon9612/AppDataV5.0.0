@@ -395,6 +395,7 @@
 
         fetch(`${URL_BASE}frenomotos/detener-escritura`, {
                 method: 'POST',
+                keepalive: true,
                 headers: {
                     'Content-Type': 'application/json'
                 },

@@ -3,9 +3,12 @@
     
 
     <!-- ======= SECCIÓN 2: GASES MIXTA SIMULADOR DE PRUEBAS ======= -->
+    @php($mostrarSimulador = session('licencia.aplicaresolucion', '1') !== '0')
+    @if($mostrarSimulador)
     <section id="visor-simulador" class="contact">
         <x-simulatorgases :nombreprueba="'Gases Mixta'" :tipovehiculo="1" />
     </section>
+    @endif
 
     @if(versionapp() == '1')
     <!-- ======= SECCIÓN 1: GASES MIXTA ORIGINAL ======= -->
@@ -20,11 +23,11 @@
                         <!-- Acordeón: Correcion y realizacion de prueba -->
                         <div class="accordion-item mb-2">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVehiculoOriginal">
+                                <button class="accordion-button {{ $mostrarSimulador ? 'collapsed' : '' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVehiculoOriginal">
                                     🚘 Correcion y realizacion de prueba
                                 </button>
                             </h2>
-                            <div id="collapseVehiculoOriginal" class="accordion-collapse collapse" data-bs-parent="#accordionGasesOriginal">
+                            <div id="collapseVehiculoOriginal" class="accordion-collapse collapse {{ $mostrarSimulador ? '' : 'show' }}" data-bs-parent="#accordionGasesOriginal">
                                 <div class="accordion-body">
                                     <form action="{{ url('/ga') }}" method="POST">
                                         @csrf

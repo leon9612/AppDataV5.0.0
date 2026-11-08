@@ -1,8 +1,11 @@
 @include('layout.heder')
 <main id="main">
+    @php($mostrarSimulador = session('licencia.aplicaresolucion', '1') !== '0')
+    @if($mostrarSimulador)
     <section id="visor-simulador" class="contact">
         <x-simulatorgases :nombreprueba="'Gases Motos'" :tipovehiculo="2" />
     </section>
+    @endif
     @if(versionapp() == '1')
     <section id="visor" class="contact">
         <div class="container">
@@ -18,11 +21,11 @@
                         <!-- Acordeón: Correcion y realizacion de prueba -->
                         <div class="accordion-item mb-2">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVehiculoOriginal">
+                                <button class="accordion-button {{ $mostrarSimulador ? 'collapsed' : '' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVehiculoOriginal">
                                     🚘 Correcion y realizacion de prueba
                                 </button>
                             </h2>
-                            <div id="collapseVehiculoOriginal" class="accordion-collapse collapse" data-bs-parent="#accordionGasesOriginal">
+                            <div id="collapseVehiculoOriginal" class="accordion-collapse collapse {{ $mostrarSimulador ? '' : 'show' }}" data-bs-parent="#accordionGasesOriginal">
                                 <div class="accordion-body">
                                     <form action="{{ url('/gam') }}" method="POST" class="form-control">
                                         @csrf

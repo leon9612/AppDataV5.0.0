@@ -59,6 +59,14 @@
                                         </div>
                                     </div>
 
+                                    <!-- Totales de la prueba cargada (intensidad total y grupos sumados) -->
+                                    <div id="resumenPruebaLuces" class="px-4 py-2 small border-bottom" style="display:none;">
+                                        <i class="bi bi-calculator"></i>
+                                        <strong>Intensidad total:</strong> <span id="resumenIntensidadTotal">-</span>
+                                        <span class="mx-2">|</span>
+                                        <strong>Sumadas:</strong> <span id="resumenSumadas">-</span>
+                                    </div>
+
                                     <!-- ════════════ LUCES BAJAS ════════════ -->
                                     <div class="seccion" style="--accent: var(--bajas); --accent-bg: var(--bajas-bg);">
                                         <div class="seccion-titulo">
@@ -317,34 +325,77 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         inicializarBusquedaDatos(1, function(res) {
-            res.valor = res.valor.replace(",", ".");
+            aplicarResultadoLuces(res, '', false);
 
-            if (res.observacion == 'baja_izquierda') {
-                $("#baja_izquierda").val(res.valor);
-                validarRango(res.valor, 'luces', 'baja_izquierda');
-            }
-            if (res.observacion == 'alta_izquierda') {
-                $("#alta_izquierda").val(res.valor);
-                validarRango(res.valor, 'luces', 'alta_izquierda');
-            }
-            if (res.observacion == 'baja_derecha') {
-                $("#baja_derecha").val(res.valor);
-                validarRango(res.valor, 'luces', 'baja_derecha');
-            }
-            if (res.observacion == 'alta_derecha') {
-                $("#alta_derecha").val(res.valor);
-                validarRango(res.valor, 'luces', 'alta_derecha');
-            }
-            if (res.observacion == 'antis_derecha') {
-                $("#anti_derecha").val(res.valor);
-                validarRango(res.valor, 'luces', 'anti_derecha');
-            }
-            if (res.observacion == 'antis_izquierda') {
-                $("#anti_izquierda").val(res.valor);
-                validarRango(res.valor, 'luces', 'anti_izquierda');
+            // Totales guardados por Cluces@store (los mismos que restaura el formulario)
+            if (res.tiporesultado === 'intensidad_total' || res.tiporesultado === 'conmuLux') {
+                document.getElementById('resumenPruebaLuces').style.display = '';
+                if (res.tiporesultado === 'intensidad_total') {
+                    document.getElementById('resumenIntensidadTotal').textContent = String(res.valor).replace(',', '.');
+                } else {
+                    const d = String(res.valor).padStart(3, '0').split('');
+                    const grupos = ['bajas', 'altas', 'antiniebla'].filter((_, i) => d[i] === '1');
+                    document.getElementById('resumenSumadas').textContent = grupos.length ? grupos.join(', ') : 'ninguna';
+                }
             }
         });
     });
+
+    /**
+     * Carga una fila de `resultados` en su campo. Cómo se guarda (Cluces@store):
+     *   observacion   = baja_|alta_|antis_|inclinacion_ + derecha|izquierda
+     *   tiporesultado = número de toma: '1','2','3','4'  → sufijo '', _1, _2, _3
+     * Sin el sufijo, las tomas 2..4 pisaban el valor de la toma 1.
+     *
+     * @param {object}  res         Fila devuelta por /buscarvehiculo
+     * @param {string}  prefijo     '' (simulador) o 'mix_' (formulario de corrección)
+     * @param {boolean} esFormulario true en el formulario (INCLI_x en vez de baja_x_inc)
+     * @returns {boolean} true si la fila se cargó en algún campo
+     */
+    function aplicarResultadoLuces(res, prefijo, esFormulario) {
+        const sufijos = {
+            '1': '',
+            '2': '_1',
+            '3': '_2',
+            '4': '_3'
+        };
+        const m = /^(baja|alta|antis|inclinacion)_(derecha|izquierda)$/.exec(res.observacion || '');
+        if (!m) return false;
+
+        // tiporesultado puede venir como '1', 1 o '1.0'; si no es un número válido
+        // (filas escritas por otra app) se asume toma 1 para no perder el dato.
+        const toma = String(Math.trunc(Number.parseFloat(res.tiporesultado)));
+        const sufijo = sufijos[toma] ?? '';
+
+        const valor = String(res.valor ?? '').replace(',', '.');
+        const lado = m[2];
+        let id;
+        if (m[1] === 'inclinacion') {
+            id = esFormulario ? `${prefijo}incli_${lado}${sufijo}` : `baja_${lado}${sufijo}_inc`;
+        } else {
+            id = `${prefijo}${m[1] === 'antis' ? 'anti' : m[1]}_${lado}${sufijo}`;
+        }
+
+        const campo = document.getElementById(id);
+        if (!campo) {
+            console.warn('aplicarResultadoLuces: no existe el campo', id, res);
+            return false; // el simulador tiene menos tomas que las guardadas
+        }
+
+        campo.value = valor;
+        if (m[1] !== 'inclinacion' || esFormulario) validarRango(valor, 'luces', id);
+
+        // Las inclinaciones del simulador solo se ven (y se envían) en modo manual:
+        // si la prueba trae inclinación, se pasa a manual para que el dato cargado se use.
+        if (m[1] === 'inclinacion' && !esFormulario) {
+            const modo = document.getElementById('modoInclinacion');
+            if (modo && modo.value !== 'manual') {
+                modo.value = 'manual';
+                if (typeof mostrarInputsInclinacion === 'function') mostrarInputsInclinacion();
+            }
+        }
+        return true;
+    }
 </script>
 
 <script>
@@ -483,8 +534,9 @@
     // ─── Desconectar ────────────────────────────────────────────────────────
     function desconectarSimuladorLuces() {
 
+        // Sin tipovehiculo el backend cierra los luxómetros de mixta Y motos: se envía la pista propia
         var datos = {
-
+            tipovehiculo: parseInt(document.getElementById('tipovehiculo').value),
             _token: $('#csrf_tokenLuces').val()
         };
 
@@ -500,6 +552,7 @@
 
         fetch(`${URL_BASE}lucesmixta/detener-servidor`, {
                 method: 'POST',
+                keepalive: true,
                 headers: {
                     'Content-Type': 'application/json'
                 },

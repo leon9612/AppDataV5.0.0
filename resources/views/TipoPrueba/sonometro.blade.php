@@ -5,9 +5,12 @@
     }
 </style>
 <main id="main">
+    @php($mostrarSimulador = session('licencia.aplicaresolucion', '1') !== '0')
+    @if($mostrarSimulador)
     <section id="visor-simulador" class="contact">
         <x-simulatorsonometro :nombreprueba="'Prueba Sonometro'" :tipovehiculo="1" />
     </section>
+    @endif
 
 
     @if(versionapp() == '1')
@@ -22,11 +25,11 @@
                         <!-- Acordeón: Prueba de Sonometro -->
                         <div class="accordion-item mb-2">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSonometro">
+                                <button class="accordion-button {{ $mostrarSimulador ? 'collapsed' : '' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSonometro">
                                     🔊 Prueba de Sonometro
                                 </button>
                             </h2>
-                            <div id="collapseSonometro" class="accordion-collapse collapse" data-bs-parent="#accordionSonometro">
+                            <div id="collapseSonometro" class="accordion-collapse collapse {{ $mostrarSimulador ? '' : 'show' }}" data-bs-parent="#accordionSonometro">
                                 <div class="accordion-body">
                                     <form action="{{ url('/so') }}" method="POST">
                                         @csrf
@@ -270,8 +273,10 @@
 
         fetch(`${URL_BASE}sonometro/detener-escritura`, {
             method: 'POST',
+            keepalive: true,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ _token: $('#csrf_token').val() })
+            // El backend detiene solo la pista indicada (mixta y motos pueden estar activas a la vez)
+            body: JSON.stringify({ tipovehiculo: tipovehiculoSonometro, _token: $('#csrf_token').val() })
         })
         .catch(() => { /* el servidor puede no responder al cerrar */ })
         .finally(() => {

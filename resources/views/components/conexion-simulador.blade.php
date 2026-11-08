@@ -51,3 +51,23 @@
         </div>
     </div>
 </div>
+
+{{-- Si el usuario cambia de prueba / cierra sesión sin pulsar Desconectar, se
+     dispara el Desconectar del módulo (el botón solo está habilitado si hay
+     conexión activa). Los fetch de desconexión usan keepalive para sobrevivir
+     a la navegación. --}}
+<script>
+    (function () {
+        let desconectado = false;
+        function autoDesconectar() {
+            if (desconectado) return;
+            const btn = document.getElementById(@json($idDesconectar));
+            if (btn && !btn.disabled) {
+                desconectado = true;
+                btn.click();
+            }
+        }
+        window.addEventListener('pagehide', autoDesconectar);
+        window.addEventListener('beforeunload', autoDesconectar);
+    })();
+</script>

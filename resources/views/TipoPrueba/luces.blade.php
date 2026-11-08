@@ -1,9 +1,12 @@
 @include('layout.heder')
 
 <main id="main">
+    @php($mostrarSimulador = session('licencia.aplicaresolucion', '1') !== '0')
+    @if($mostrarSimulador)
     <section id="visor-simulador" class="contact">
         <x-simluadorluces :nombreprueba="'Luces Mixta'" :tipovehiculo="1" />
     </section>
+    @endif
     <section id="visor" class="contact">
         <div class="container">
 
@@ -16,11 +19,11 @@
                         <!-- Acordeón: Correcion y realizacion de prueba -->
                         <div class="accordion-item mb-2">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVehiculoOriginal">
+                                <button class="accordion-button {{ $mostrarSimulador ? 'collapsed' : '' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVehiculoOriginal">
                                     🚘 Correcion y realizacion de prueba
                                 </button>
                             </h2>
-                            <div id="collapseVehiculoOriginal" class="accordion-collapse collapse" data-bs-parent="#accordionGasesOriginal">
+                            <div id="collapseVehiculoOriginal" class="accordion-collapse collapse {{ $mostrarSimulador ? '' : 'show' }}" data-bs-parent="#accordionGasesOriginal">
                                 <div class="accordion-body">
                                     <form action="{{ url('/lu') }}" method="POST" class="form-control">
                                         @csrf
@@ -672,44 +675,25 @@
                                     timeout: 100000
                                 });
                             }
-                            res.valor = res.valor.replace(",", ".");
-                            // console.log(res.observacion + " " + res.valor)
-                            if (res.observacion == 'baja_izquierda') {
-                                $("#mix_baja_izquierda").val(res.valor);
-                                validarRango(res.valor, 'luces', 'mix_baja_izquierda');
-                            }
-                            if (res.observacion == 'inclinacion_izquierda') {
-                                $("#mix_incli_izquierda").val(res.valor);
-                                validarRango(res.valor, 'luces', 'mix_incli_izquierda');
-                            }
-                            if (res.observacion == 'alta_izquierda') {
-                                $("#mix_alta_izquierda").val(res.valor);
-                                validarRango(res.valor, 'luces', 'mix_alta_izquierda');
-                            }
-                            if (res.observacion == 'baja_derecha') {
-                                $("#mix_baja_derecha").val(res.valor);
-                                validarRango(res.valor, 'luces', 'mix_baja_derecha');
-                            }
+                            // Baja/alta/anti/inclinación con su número de toma (tiporesultado)
+                            aplicarResultadoLuces(res, 'mix_', true);
 
-                            if (res.observacion == 'inclinacion_derecha') {
-                                $("#mix_incli_derecha").val(res.valor);
-                                validarRango(res.valor, 'luces', 'mix_incli_derecha');
+                            // Suma de intensidades guardada tal cual
+                            if (res.tiporesultado === 'intensidad_total') {
+                                var tot = String(res.valor).replace(",", ".");
+                                $("#intensidad_total").val(tot);
+                                $("#int_total").html("Intensidad total: " + tot);
                             }
-                            if (res.observacion == 'alta_derecha') {
-                                $("#mix_alta_derecha").val(res.valor);
-                                validarRango(res.valor, 'luces', 'mix_alta_derecha');
+                            // Qué grupos se sumaron: "conmuLux" = dígitos bajas/altas/antis ("110")
+                            if (res.tiporesultado === 'conmuLux') {
+                                var digitos = String(res.valor).padStart(3, '0').split('');
+                                optLuxV = [parseInt(digitos[0]) || 0, parseInt(digitos[1]) || 0, parseInt(digitos[2]) || 0];
+                                $("#optLUx").val(optLuxV.join(''));
+                                $("#sum_bajas").prop('checked', optLuxV[0] === 1);
+                                $("#sum_altas").prop('checked', optLuxV[1] === 1);
+                                $("#sum-anti").prop('checked', optLuxV[2] === 1);
+                                $("select[name='selSimultanea']").val(optLuxV.some(function(d) { return d === 1; }) ? '1' : '0');
                             }
-                            if (res.observacion == 'antis_derecha') {
-                                $("#mix_anti_derecha").val(res.valor);
-                                validarRango(res.valor, 'luces', 'mix_anti_derecha');
-                            }
-                            if (res.observacion == 'antis_izquierda') {
-                                $("#mix_anti_izquierda").val(res.valor);
-                                validarRango(res.valor, 'luces', 'mix_anti_izquierda');
-                            }
-
-
-
                         });
                     } else {
                         Toast.fire({

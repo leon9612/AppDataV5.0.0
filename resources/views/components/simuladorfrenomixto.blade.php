@@ -696,6 +696,7 @@
 
         fetch(`${URL_BASE}frenomixto/detener-escritura`, {
                 method: 'POST',
+                keepalive: true,
                 headers: {
                     'Content-Type': 'application/json'
                 },

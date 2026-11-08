@@ -1,9 +1,12 @@
 @include('layout.heder')
 
 <main id="main">
+    @php($mostrarSimulador = session('licencia.aplicaresolucion', '1') !== '0')
+    @if($mostrarSimulador)
     <section id="visor-simulador" class="contact">
         <x-simluadorluces :nombreprueba="'Luces Motos'" :tipovehiculo="2" />
     </section>
+    @endif
     <section id="visor" class="contact">
         <div class="container">
             <div class="row" data-aos="fade-in">
@@ -14,11 +17,11 @@
                         <!-- Acordeón: Correcion y realizacion de prueba -->
                         <div class="accordion-item mb-2">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVehiculoOriginal">
+                                <button class="accordion-button {{ $mostrarSimulador ? 'collapsed' : '' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVehiculoOriginal">
                                     🚘 Correcion y realizacion de prueba
                                 </button>
                             </h2>
-                            <div id="collapseVehiculoOriginal" class="accordion-collapse collapse" data-bs-parent="#accordionGasesOriginal">
+                            <div id="collapseVehiculoOriginal" class="accordion-collapse collapse {{ $mostrarSimulador ? '' : 'show' }}" data-bs-parent="#accordionGasesOriginal">
                                 <div class="accordion-body">
                                     <form action="{{ url('/lum') }}" method="POST" class="form-control">
                                         @csrf
@@ -406,10 +409,23 @@
                                 });
                             }
 
-                            if (res.observacion == 'baja_derecha')
-                                $("#baja_moto").val(res.valor);
-                            if (res.observacion == 'inclinacion_derecha')
-                                $("#incli_derecha").val(res.valor);
+                            // Así guarda Clucesmotos@store (observacion + tiporesultado):
+                            //   baja_derecha / inclinacion_derecha, toma 1 -> BAJA 1 / INCLI 1
+                            //   baja_izquierda / inclinacion_izquierda, toma 1 -> BAJA 2 / INCLI 2
+                            //   baja_derecha / inclinacion_derecha, toma 2 -> BAJA 3 / INCLI 3
+                            var valor = String(res.valor ?? '').replace(',', '.');
+                            var toma = String(res.tiporesultado);
+                            var destino = null;
+                            if (res.observacion == 'baja_derecha') {
+                                destino = toma == '1' ? 'baja_moto' : (toma == '2' ? 'baja_moto2' : null);
+                            } else if (res.observacion == 'baja_izquierda' && toma == '1') {
+                                destino = 'baja_moto1';
+                            } else if (res.observacion == 'inclinacion_derecha') {
+                                destino = toma == '1' ? 'incli_derecha' : (toma == '2' ? 'incli_derecha2' : null);
+                            } else if (res.observacion == 'inclinacion_izquierda' && toma == '1') {
+                                destino = 'incli_derecha1';
+                            }
+                            if (destino) $("#" + destino).val(valor);
 
 
 

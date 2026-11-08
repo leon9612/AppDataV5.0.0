@@ -28,21 +28,21 @@
                                         <div class="card-header">📡 Datos del Captador</div>
                                         <div class="card-body">
                                             <div class="row g-2 align-items-end">
-                                                <div class="col-6 col-md-{{ $tipovehiculo === 2 ? '3' : '4' }}">
+                                                <div class="col-6 col-md-{{ $tipovehiculo === 2 ? '2' : '4' }}">
                                                     <div class="form-floating">
                                                         <input type="number" class="form-control" id="temp_captador" placeholder="Temperatura" step="0.1" value="60">
                                                         <label for="temp_captador">Temperatura (°C)</label>
                                                     </div>
                                                 </div>
                                                 @if ($tipovehiculo === 2)
-                                                <div class="col-6 col-md-3">
+                                                <div class="col-6 col-md-2">
                                                     <div class="form-floating">
                                                         <input type="number" class="form-control" id="sim_rpm_crucero" placeholder="RPM" value="2500">
                                                         <label for="sim_rpm_crucero">RPM Crucero</label>
                                                     </div>
                                                 </div>
                                                 @endif
-                                                <div class="col-12 col-md-{{ $tipovehiculo === 2 ? '6' : '8' }}">
+                                                <div class="col-12 col-md-{{ $tipovehiculo === 2 ? '5' : '5' }}">
                                                     <label class="fw-bold mb-1 small">RPM a enviar:</label>
                                                     <div class="btn-group w-100" role="group">
                                                         <input type="radio" class="btn-check" name="tipoRPM" id="rpmRalenti" autocomplete="off" checked>
@@ -55,12 +55,17 @@
                                                         </label>
                                                     </div>
                                                 </div>
+                                                <div class="col-12 col-md-3">
+                                                    <button id="btnDesconectarSonda" class="btn btn-outline-danger w-100 btn-enviar" disabled>
+                                                        <i class="bi bi-plug"></i> Desconectar sonda
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                
+
 
                                 <!-- Valores RALENTI -->
                                 <div class="col-12 mb-3">

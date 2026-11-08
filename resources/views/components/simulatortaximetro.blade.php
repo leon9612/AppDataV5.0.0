@@ -253,6 +253,7 @@
 
         fetch(`${URL_BASE}taximetro/detener-escritura`, {
                 method: 'POST',
+                keepalive: true,
                 headers: {
                     'Content-Type': 'application/json'
                 },

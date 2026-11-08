@@ -20,6 +20,7 @@ use App\Http\Controllers\Cvisual;
 use App\Http\Controllers\Cactualizar;
 use App\Http\Controllers\Calibracion;
 use App\Http\Controllers\Cfotos;
+use App\Http\Controllers\Ccaptador;
 use App\Traits\EventosTrait;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -71,6 +72,8 @@ Route::middleware('sesion')->group(function () {
     Route::resource('update', Cactualizar::class)->middleware('modulo:actu');
     Route::resource('cal', Calibracion::class)->middleware('modulo:cal');
     Route::resource('fot', Cfotos::class)->middleware('modulo:fot');
+    // Captador RPM/Temp: basta con que la licencia habilite motos o livianos
+    Route::resource('cap', Ccaptador::class)->only(['index'])->middleware('modulo:simcapmot,simcapliv');
 
     Route::post('/buscarvehiculo', [Cprincipal::class, 'getVehiculo']);
 
