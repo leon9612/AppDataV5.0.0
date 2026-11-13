@@ -95,6 +95,35 @@ class Licencia
         return self::conDiasRestantes($resultado, $hoy);
     }
 
+    // Informa a appdatacontrol la versión que quedó instalada tras una descarga (SPEC 07).
+    // Mejor esfuerzo: nunca lanza excepción ni toca la caché de licencia; devuelve false si falla.
+    public static function reportarVersion(string $dominio, string $version): bool
+    {
+        $dominio = trim($dominio);
+        $version = trim($version);
+        if ($dominio === '' || $version === '') {
+            return false;
+        }
+
+        try {
+            $respuesta = self::enviar(self::URL_DISPOSITIVO . '/setVersionInstalada', function ($http, $url) use ($dominio, $version) {
+                return $http->withHeaders(['autorization' => self::TOKEN_APPDATA])
+                    ->asForm()
+                    ->post($url, ['dominio' => $dominio, 'version' => $version]);
+            });
+        } catch (\Throwable $e) {
+            Log::warning('Licencia: no se pudo reportar la versión instalada: ' . $e->getMessage());
+            return false;
+        }
+
+        if (!$respuesta->successful() || $respuesta->json('success') !== true) {
+            Log::warning('Licencia: appdatacontrol rechazó el reporte de versión (HTTP ' . $respuesta->status() . ')');
+            return false;
+        }
+
+        return true;
+    }
+
     private static function evaluar($estadoDispositivo, $licencias, Carbon $hoy): array
     {
         if ($estadoDispositivo === null || (string) $estadoDispositivo === '0') {
@@ -125,16 +154,66 @@ class Licencia
             $modulos[$modulo] = (string) ($licencia[$modulo] ?? '0') === '1' ? '1' : '0';
         }
 
+        // El captador RPM puede tener su propia vigencia (fechavigenciarpm). Vacía, nula o inválida
+        // hereda la principal. Vencida: solo se deshabilita el captador, el resto de módulos sigue igual.
+        $vigenciaRpm = self::fecha($licencia['fechavigenciarpm'] ?? null);
+        $rpmVencido = $vigenciaRpm !== null && $hoy->copy()->startOfDay()->gte($vigenciaRpm);
+        if ($rpmVencido) {
+            $modulos['simcapmot'] = '0';
+            $modulos['simcapliv'] = '0';
+        }
+
         return [
             'permitido' => true,
             'motivo' => 'activa',
             'mensaje' => '',
             'fechavigencia' => $vigencia->toDateString(),
+            'fechavigenciarpm' => $vigenciaRpm ? $vigenciaRpm->toDateString() : null,
+            'rpmVencido' => $rpmVencido,
             'modulos' => $modulos,
+            'mensajes' => self::mensajes($licencia['mensajes'] ?? null, $hoy),
             // 0 = sin simuladores y acordeón de prueba abierto; sin la columna se asume 1 (comportamiento actual)
             'aplicaresolucion' => (string) ($licencia['aplicaresolucion'] ?? '1') === '0' ? '0' : '1',
             'sinConexion' => false,
         ];
+    }
+
+    // Mensajes del servidor para la pantalla principal. Se sanean (texto plano, tipo válido, recortes)
+    // y se filtran por fechadesde <= hoy <= fechahasta (hasta inclusive) con la fecha del servidor de
+    // licencias. Cualquier formato inesperado se ignora: devuelve [] o descarta ese mensaje.
+    private static function mensajes($crudos, Carbon $hoy): array
+    {
+        if (!is_array($crudos)) {
+            return [];
+        }
+
+        $dia = $hoy->copy()->startOfDay();
+        $mensajes = [];
+        foreach ($crudos as $m) {
+            if (!is_array($m) || !is_string($m['texto'] ?? null) || trim($m['texto']) === '') {
+                continue;
+            }
+
+            $desde = self::fecha($m['fechadesde'] ?? null);
+            $hasta = self::fecha($m['fechahasta'] ?? null);
+            if (($desde && $dia->lt($desde)) || ($hasta && $dia->gt($hasta))) {
+                continue;
+            }
+
+            $tipo = $m['tipo'] ?? '';
+            $mensajes[] = [
+                'id' => (int) ($m['id'] ?? 0),
+                'titulo' => is_string($m['titulo'] ?? null) ? mb_substr(trim($m['titulo']), 0, 100) : '',
+                'texto' => mb_substr(trim($m['texto']), 0, 500),
+                'tipo' => in_array($tipo, ['info', 'aviso', 'urgente'], true) ? $tipo : 'info',
+            ];
+
+            if (count($mensajes) === 5) {
+                break;
+            }
+        }
+
+        return $mensajes;
     }
 
     // Sin respuesta de appdatacontrol siempre se bloquea, aunque la última validación haya sido exitosa
@@ -150,10 +229,14 @@ class Licencia
             'motivo' => $motivo,
             'mensaje' => $mensaje,
             'fechavigencia' => $fechavigencia,
+            'fechavigenciarpm' => null,
+            'rpmVencido' => false,
             'modulos' => array_fill_keys(self::MODULOS, '0'),
+            'mensajes' => [],
             'aplicaresolucion' => '1',
             'sinConexion' => false,
             'diasRestantes' => null,
+            'diasRestantesRpm' => null,
         ];
     }
 
@@ -162,6 +245,12 @@ class Licencia
         $vigencia = self::fecha($resultado['fechavigencia'] ?? null);
         $resultado['diasRestantes'] = $resultado['permitido'] && $vigencia
             ? (int) $hoy->copy()->startOfDay()->diffInDays($vigencia, false)
+            : null;
+
+        // Días hasta el vencimiento del captador RPM; null si hereda la principal o la licencia está bloqueada
+        $vigenciaRpm = self::fecha($resultado['fechavigenciarpm'] ?? null);
+        $resultado['diasRestantesRpm'] = $resultado['permitido'] && $vigenciaRpm
+            ? (int) $hoy->copy()->startOfDay()->diffInDays($vigenciaRpm, false)
             : null;
         return $resultado;
     }

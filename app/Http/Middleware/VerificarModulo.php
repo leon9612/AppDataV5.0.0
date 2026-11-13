@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -20,6 +21,13 @@ class VerificarModulo
         }
 
         $mensaje = 'Este módulo no está habilitado en su licencia.';
+
+        // Captador RPM con vigencia propia vencida: se avisa con la fecha en vez del mensaje genérico
+        if (session('licencia.rpmVencido') && array_intersect($modulos, ['simcapmot', 'simcapliv'])) {
+            $fecha = session('licencia.fechavigenciarpm');
+            $fechaTexto = $fecha ? Carbon::createFromFormat('Y-m-d', $fecha)->format('d/m/Y') : null;
+            $mensaje = 'La licencia del captador RPM venció' . ($fechaTexto ? " el $fechaTexto" : '') . '.';
+        }
         if ($request->ajax() || $request->expectsJson()) {
             return response()->json(['message' => $mensaje], 403);
         }
