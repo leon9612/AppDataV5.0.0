@@ -94,7 +94,7 @@
                     $(".selVersion").append($('<option>', {
                         value: value.file,
                         text: value.file
-                    }));
+                    }).attr('data-url', value.url || ''));
                 });
 
             },
@@ -149,16 +149,24 @@
             data: {
 
                 file: $(".selVersion option:selected").attr('value'),
+                url: $(".selVersion option:selected").attr('data-url') || '',
                 _token: $("input[name='_token']").val()
             },
             success: function(data, textStatus, jqXHR) {
                 // console.log(data)
                 downloadingAlert.close();
                 if (data.success) {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Descarga exitosa'
-                    });
+                    if (data.versionReportada === false) {
+                        Toast.fire({
+                            icon: 'warning',
+                            title: 'Descarga exitosa, pero no se pudo informar la versión al servidor'
+                        });
+                    } else {
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Descarga exitosa'
+                        });
+                    }
                     // window.location.href = ;
                 } else {
                     Toast.fire({

@@ -452,6 +452,7 @@
                     $.each(data, function(i, res) {
                         $('#selMaquina').append('<option value="' + res.idmaquina + '">' + res.maquina + '</option>');
                     });
+                    window.priorizarUsuarioMaquinaPrueba();
                 } else {
                     Toast.fire({
                         icon: "error",

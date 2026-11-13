@@ -736,8 +736,8 @@
     <div class="bg-glow bg-glow-3"></div>
 
     <!-- Badge versión (5 clicks activa el panel LS) -->
-    <div class="version-info" id="versionBadge" title="v4.0.0">
-        <i class="bi bi-tag-fill me-1"></i> V4.0.0
+    <div class="version-info" id="versionBadge" title="v5.0.0">
+        <i class="bi bi-tag-fill me-1"></i> V5.0.0
     </div>
 
     <!-- Modal LocalStorage (función oculta) -->
@@ -1306,4 +1306,4 @@
     </script>
 </body>
 
-</html>
+</html>

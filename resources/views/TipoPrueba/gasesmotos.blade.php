@@ -443,6 +443,7 @@
                             .maquina +
                             '</option>');
                     });
+                    window.priorizarUsuarioMaquinaPrueba();
                 } else {
                     Toast.fire({
                         icon: "error",

@@ -284,6 +284,7 @@
                             .maquina +
                             '</option>');
                     });
+                    window.priorizarUsuarioMaquinaPrueba();
                 } else {
                     Toast.fire({
                         icon: "error",
@@ -482,6 +483,7 @@
                             .maquina +
                             '</option>');
                     });
+                    window.priorizarUsuarioMaquinaPrueba();
                 } else {
                     Toast.fire({
                         icon: "error",

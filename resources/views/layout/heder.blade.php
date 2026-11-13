@@ -467,6 +467,40 @@
             display: none;
         }
 
+        /* Mensajes publicados desde el servidor (pantalla principal) */
+        .mensaje-servidor {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            margin-bottom: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: 1px solid #B6D4FE;
+            border-left: 5px solid #0D6EFD;
+            background: #EAF3FF;
+            color: #0A3D80;
+            text-align: left;
+        }
+
+        .mensaje-servidor.aviso {
+            border-color: #FFE082;
+            border-left-color: #E6A800;
+            background: #FFF9E6;
+            color: #7A5D00;
+        }
+
+        .mensaje-servidor.urgente {
+            border-color: #F5C2C7;
+            border-left-color: #DC2626;
+            background: #FDECEC;
+            color: #8A1C1C;
+        }
+
+        .mensaje-servidor-texto {
+            white-space: pre-line;
+            overflow-wrap: anywhere;
+        }
+
         /* Estilos para campos fuera de rango */
         .fuera-rango {
             background-color: #f8d7da !important;

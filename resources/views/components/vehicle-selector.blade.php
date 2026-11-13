@@ -181,7 +181,9 @@
                     data-kilometraje="{{ $placa->kilometraje }}"
                     data-combustible="{{ $placa->combustible }}"
                     data-tiempos="{{ $placa->tiempos }}"
-                    data-cilindraje="{{ $placa->cilindraje }}">
+                    data-cilindraje="{{ $placa->cilindraje }}"
+                    data-idusuario="{{ $placa->idusuario ?? '' }}"
+                    data-idmaquina="{{ $placa->idmaquina ?? '' }}">
                     {{ $placa->placa }}
                 </option>
                 @endforeach
@@ -308,7 +310,7 @@
             <span class="input-group-text">
                 <i class="bi bi-person"></i>
             </span>
-            <select class="form-select" id="inputGroupSelect01" name="selUsuario" id="selUsuario">
+            <select class="form-select" name="selUsuario" id="selUsuario">
                 @foreach ($usuarios as $us)
                 <option value="{{ $us->IdUsuario }}">{{ $us->nombre }} </option>
                 @endforeach
@@ -493,6 +495,8 @@
                     option.setAttribute('data-combustible', placa.combustible);
                     option.setAttribute('data-tiempos', placa.tiempos);
                     option.setAttribute('data-cilindraje', placa.cilindraje);
+                    option.setAttribute('data-idusuario', placa.idusuario ?? '');
+                    option.setAttribute('data-idmaquina', placa.idmaquina ?? '');
                     option.textContent = placa.placa;
                     selectPlaca.appendChild(option);
                 });

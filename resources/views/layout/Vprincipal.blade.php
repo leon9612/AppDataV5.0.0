@@ -5,6 +5,20 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-11">
+                    {{-- Mensajes del servidor: fijos, sin cerrar (los actualiza restric.js al validar la licencia) --}}
+                    <div id="mensajesServidor">
+                        @foreach (session('licencia.mensajes', []) as $mensaje)
+                        @php($tipoMensaje = in_array($mensaje['tipo'] ?? '', ['info', 'aviso', 'urgente'], true) ? $mensaje['tipo'] : 'info')
+                        <div class="mensaje-servidor {{ $tipoMensaje }}" role="{{ $tipoMensaje === 'info' ? 'status' : 'alert' }}">
+                            <i class="bi {{ $tipoMensaje === 'info' ? 'bi-info-circle-fill' : 'bi-exclamation-triangle-fill' }}"></i>
+                            <div class="mensaje-servidor-texto">
+                                @if (!empty($mensaje['titulo']))<strong>{{ $mensaje['titulo'] }}</strong><br>@endif
+                                {{ $mensaje['texto'] ?? '' }}
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+
                     <!-- Encabezado principal -->
                     <div class="section-title text-center mb-4 mb-lg-5">
                         <h1 class="fw-bold display-5 text-primary">Módulo Principal</h1>

@@ -46,6 +46,13 @@
                     <span id="estadoConexionSimulador" class="badge bg-danger"><i class="bi bi-plug"></i> Desconectado</span>
                 </div>
 
+                @if (!empty($avisoVigenciaRpm))
+                    <div id="avisoVigenciaRpm" class="alert alert-warning" role="alert" style="font-size:.8rem;padding:8px 10px;margin-bottom:8px;">
+                        <i class="bi bi-calendar-event"></i>
+                        La licencia del captador vence {{ $avisoVigenciaRpm->dias === 1 ? 'mañana' : 'en ' . $avisoVigenciaRpm->dias . ' días' }}{{ $avisoVigenciaRpm->fecha ? ' (' . $avisoVigenciaRpm->fecha . ')' : '' }}.
+                    </div>
+                @endif
+
                 <div id="avisoExclusividad" class="alert alert-warning d-none" role="alert">
                     <i class="bi bi-exclamation-triangle-fill"></i>
                     <strong>Detenido por otro simulador.</strong> Vuelva a conectar el captador para retomarlo.
