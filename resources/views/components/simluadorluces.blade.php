@@ -341,61 +341,6 @@
         });
     });
 
-    /**
-     * Carga una fila de `resultados` en su campo. Cómo se guarda (Cluces@store):
-     *   observacion   = baja_|alta_|antis_|inclinacion_ + derecha|izquierda
-     *   tiporesultado = número de toma: '1','2','3','4'  → sufijo '', _1, _2, _3
-     * Sin el sufijo, las tomas 2..4 pisaban el valor de la toma 1.
-     *
-     * @param {object}  res         Fila devuelta por /buscarvehiculo
-     * @param {string}  prefijo     '' (simulador) o 'mix_' (formulario de corrección)
-     * @param {boolean} esFormulario true en el formulario (INCLI_x en vez de baja_x_inc)
-     * @returns {boolean} true si la fila se cargó en algún campo
-     */
-    function aplicarResultadoLuces(res, prefijo, esFormulario) {
-        const sufijos = {
-            '1': '',
-            '2': '_1',
-            '3': '_2',
-            '4': '_3'
-        };
-        const m = /^(baja|alta|antis|inclinacion)_(derecha|izquierda)$/.exec(res.observacion || '');
-        if (!m) return false;
-
-        // tiporesultado puede venir como '1', 1 o '1.0'; si no es un número válido
-        // (filas escritas por otra app) se asume toma 1 para no perder el dato.
-        const toma = String(Math.trunc(Number.parseFloat(res.tiporesultado)));
-        const sufijo = sufijos[toma] ?? '';
-
-        const valor = String(res.valor ?? '').replace(',', '.');
-        const lado = m[2];
-        let id;
-        if (m[1] === 'inclinacion') {
-            id = esFormulario ? `${prefijo}incli_${lado}${sufijo}` : `baja_${lado}${sufijo}_inc`;
-        } else {
-            id = `${prefijo}${m[1] === 'antis' ? 'anti' : m[1]}_${lado}${sufijo}`;
-        }
-
-        const campo = document.getElementById(id);
-        if (!campo) {
-            console.warn('aplicarResultadoLuces: no existe el campo', id, res);
-            return false; // el simulador tiene menos tomas que las guardadas
-        }
-
-        campo.value = valor;
-        if (m[1] !== 'inclinacion' || esFormulario) validarRango(valor, 'luces', id);
-
-        // Las inclinaciones del simulador solo se ven (y se envían) en modo manual:
-        // si la prueba trae inclinación, se pasa a manual para que el dato cargado se use.
-        if (m[1] === 'inclinacion' && !esFormulario) {
-            const modo = document.getElementById('modoInclinacion');
-            if (modo && modo.value !== 'manual') {
-                modo.value = 'manual';
-                if (typeof mostrarInputsInclinacion === 'function') mostrarInputsInclinacion();
-            }
-        }
-        return true;
-    }
 </script>
 
 <script>
